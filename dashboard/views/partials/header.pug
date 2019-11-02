@@ -1,0 +1,23 @@
+mixin header(show)
+  header
+    a(href="/dashboard").logo Dnour &nbsp;
+      span | admin panel
+      if(show)
+        nav
+          ul
+            //- li 
+            //-   a(href="/dashboard") List
+            //- li
+            //-   a(href="/create") Create new
+            if(isAuthenticated)
+              li 
+              a(href="/logout") Logout
+            else
+              li 
+              a(href="/login") Login
+
+    div.notification
+      h4.
+        Notification
+      p.
+        Message in notification

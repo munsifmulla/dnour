@@ -1,0 +1,40 @@
+{
+  "name": "challenge-log",
+  "version": "1.0.0",
+  "description": "Logging support for encountered challenges accross projects",
+  "main": "server.js",
+  "scripts": {
+    "gulp": "gulp watch",
+    "test": "nodemon server.js",
+    "start": "nodemon server.js & npm run gulp"
+  },
+  "keywords": [
+    "Javscript",
+    "Express",
+    "mongo",
+    "Pug",
+    "Sass",
+    "Node",
+    "npm"
+  ],
+  "author": "Munsif Mulla",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-mongodb-session": "^2.2.0",
+    "express-session": "^1.16.2",
+    "express-sessions": "^1.0.6",
+    "passport": "^0.4.0"
+  },
+  "devDependencies": {
+    "bcrypt": "^3.0.6",
+    "express": "^4.17.1",
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.1",
+    "node-fetch": "^2.6.0",
+    "nodemon": "^1.19.2",
+    "pug": "^2.0.4"
+  }
+}

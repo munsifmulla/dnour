@@ -1,0 +1,42 @@
+@import './vars';
+
+.login-form{
+  width: 100vw;
+  height: calc(100vh - 90px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  form{
+    width: 30%;
+    min-width: 450px;
+    padding: 45px;
+    background: $fade-white;
+    border-radius: 5px;
+    box-shadow: 0 10px 10px $shadow-2;
+     p{
+       margin-bottom: 30px;
+       &:last-of-type{
+         margin-bottom: 0;
+       }
+
+       span{
+         display: none;
+         font-size: 12px;
+         color: $error-color;
+       }
+       &.error{
+         input{
+           border-color: $error-color;
+         }
+         span{
+           display: block;
+         }
+       }
+     }
+     .register-link{
+       color: $theme-color;
+       text-decoration: underline;
+     }
+  }
+}

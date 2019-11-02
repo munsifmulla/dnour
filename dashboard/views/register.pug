@@ -1,0 +1,48 @@
+extends layouts/generic
+
+block append styles
+	link(rel="stylesheet", href="/login.css")
+block title	
+	title Challenge Log | Register
+
+block content
+	include ./partials/header.pug
+	+header(showMenu)
+	div.login-form
+		form(action="" class="register")
+			h2.header-1 Register
+			p
+				input(type="text", placeholder="Name", name="name", 
+				data-validations=`${JSON.stringify({required: true})}`, 
+				data-errors=`${JSON.stringify({required: 'Name is required'})}`)
+			p
+				input(type="text", placeholder="Email", name="email",
+				data-validations=`${JSON.stringify({required: true, regex: 'email' })}`,
+				data-errors=`${JSON.stringify({required: 'Email is required', regex: 'Provide a valid email'})}`)
+			p
+				input(type="password", placeholder="Password", name="password", 
+				data-validations=`${JSON.stringify({required: true})}`, data-errors=`${JSON.stringify({required: 'Password is required'})}`)
+			p
+				input(type="submit", value="Register", name="create-user" ).submit-form
+
+block append scripts
+	script. 
+		document.addEventListener('DOMContentLoaded', () => {
+			var form = document.querySelector('.register');
+			form.addEventListener('submit', (e) => {
+				e.preventDefault();
+				const validated = fn.validateForm(form.elements);
+				if(validated){
+					fn.post(fn.urls.registerUser, fn.serializeForm(form.elements), false)
+					.then((data) => {
+						if(data.status === 200){
+							localStorage.setItem("access-token", data.data.token);
+							fn.notification("success", "Registeration successful", data.message, 1500);
+							setTimeout(() => {window.location.href = "/dashboard"}, 1500);
+						}else{
+							fn.notification("error", "Login error", data.message, 1500);
+						}
+					});
+				}
+			})
+		})

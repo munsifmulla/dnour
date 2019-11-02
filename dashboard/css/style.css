@@ -1,0 +1,176 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,700&display=swap");
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  outline: none; }
+
+html, body {
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden; }
+
+a {
+  text-decoration: none;
+  color: inherit; }
+  a:hover {
+    text-decoration: none;
+    color: inherit; }
+
+ul {
+  list-style: none; }
+
+input[type="text"], input[type="password"], input[type="submit"] {
+  width: 100%;
+  height: 52px;
+  border: 1px solid #8d8d8d;
+  font-size: 18px;
+  padding: 15px;
+  font-weight: 300;
+  border-radius: 5px; }
+
+input[type="submit"] {
+  background: #2c3e50;
+  color: white;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 5px; }
+  input[type="submit"]:hover {
+    background: #34495e; }
+  input[type="submit"]:active {
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    font-size: 17px; }
+
+textarea.desc {
+  width: 100%;
+  height: 120px;
+  resize: none;
+  border: 1px solid #8d8d8d;
+  font-size: 18px;
+  padding: 15px;
+  font-weight: 300;
+  border-radius: 5px; }
+
+.container {
+  padding: 30px; }
+
+.header-1 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #2c3e50; }
+
+.header-large {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #222; }
+
+header {
+  padding: 15px 30px;
+  background: #2c3e50;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative; }
+  header .logo {
+    font-size: 32px;
+    font-weight: 700;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3); }
+    header .logo span {
+      font-weight: 300; }
+  header .notification {
+    position: absolute;
+    padding: 15px 30px;
+    background: rgba(3, 30, 47, 0.75);
+    border-radius: 5px;
+    color: #fff;
+    right: 10px;
+    top: 90px;
+    min-width: 300px;
+    max-width: 450px;
+    transform: translate3d(140%, 0, 0);
+    transition: transform 350ms ease-in-out;
+    cursor: pointer; }
+    header .notification.success {
+      background: rgba(57, 191, 19, 0.75);
+      transform: translate3d(0, 0, 0); }
+    header .notification.warning {
+      background: rgba(191, 134, 19, 0.75);
+      transform: translate3d(0, 0, 0); }
+    header .notification.error {
+      background: rgba(191, 19, 19, 0.75);
+      transform: translate3d(0, 0, 0); }
+    header .notification:hover {
+      opacity: 0.65; }
+  header nav ul li {
+    display: inline-block;
+    margin-right: 20px; }
+    header nav ul li:last-of-type {
+      margin-right: 0; }
+
+.list-container {
+  display: grid;
+  grid-template-columns: 30% 1fr; }
+  .list-container .search-list {
+    grid-column-start: 1/2;
+    padding: 30px;
+    height: 100vh;
+    box-shadow: 0 0 10px #8d8d8d; }
+  .list-container .challenge-list {
+    grid-column-start: 2/3;
+    padding: 30px;
+    height: 100vh;
+    overflow-y: auto; }
+    .list-container .challenge-list ul li {
+      padding: 15px;
+      border-bottom: 1px solid #c7c7c7;
+      font-size: 16px;
+      color: #222;
+      cursor: pointer; }
+      .list-container .challenge-list ul li:hover {
+        background: #eaeaea; }
+
+.create-new-challenge {
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); }
+  .create-new-challenge p {
+    margin-bottom: 30px; }
+    .create-new-challenge p:last-of-type {
+      margin-bottom: 0; }
+  .create-new-challenge form {
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    grid-column-gap: 30px;
+    grid-row-gap: 30px; }
+    .create-new-challenge form .details {
+      grid-column-start: 1/2; }
+    .create-new-challenge form .code {
+      grid-column-start: 2/3; }
+
+.ace_editor {
+  width: 100%;
+  height: 100%;
+  font-family: monospace !important; }
+
+.ace_content, .ace_text-layer, .ace_text-input, .ace_line {
+  font-family: monospace !important; }
+
+.code-editor {
+  margin: 30px 0;
+  height: 300px; }
+
+.flex-aside {
+  display: flex;
+  justify-content: space-between;
+  width: 100%; }
+
+.not-found {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px;
+  font-weight: 600;
+  color: #8d8d8d; }
+  .not-found a {
+    color: #c7c7c7; }

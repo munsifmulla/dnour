@@ -1,0 +1,41 @@
+extends layouts/generic
+
+block append styles
+	link(rel="stylesheet", href="/login.css")
+block title
+	title Challenge Log | Login
+
+block content
+	include ./partials/header.pug
+	+header(showMenu)
+	div.login-form
+		form(action="", class="login-user")
+			h2.header-1 Login
+			p
+				input(type="text", placeholder="User email", name="email")
+			p
+				input(type="password", placeholder="Password", name="password")
+			p
+				input(type="submit", value="Login", name="login-user" ).submit-form
+			//- p(class="flex-aside") Not a a user? 
+			//- 	a(href="/register", class="register-link") Register Now!
+	
+block append scripts
+	script. 
+		document.addEventListener('DOMContentLoaded', () => {
+			var form = document.querySelector('.login-user');
+			
+			form.addEventListener('submit', (e) => {
+				e.preventDefault();
+				fn.post(fn.urls.loginUser, fn.serializeForm(form.elements), false)
+				.then((data) => {
+					if(data.status === 200){
+						localStorage.setItem("access-token", data.data.token);
+						fn.notification("success", "Login success", data.message, 1500);
+						setTimeout(() => {window.location.href = "/dashboard"}, 1500);
+					}else{
+						fn.notification("error", "Login error", data.message, 1500);
+					}
+				});
+			})
+		})

@@ -1,0 +1,235 @@
+// Fonts include
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,700&display=swap');
+
+// Vars
+@import './vars';
+
+//Reset CSS
+*{
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	outline: none;
+}
+
+html, body{
+	font-family: 'Poppins', sans-serif;
+	overflow-x: hidden;
+}
+
+a{
+	text-decoration: none;
+	color: inherit;
+
+	&:hover{
+		text-decoration: none;
+		color: inherit;
+	}
+}
+
+ul{
+	list-style: none;
+}
+
+input[type="text"], input[type="password"], input[type="submit"]{
+	width: 100%;
+	height: 52px;
+	border: 1px solid $border-color-1;
+	font-size: 18px;
+	padding: 15px;
+	font-weight: 300;
+	border-radius: 5px;
+}
+
+input[type="submit"]{
+	background: $theme-color;
+	color: white;
+	line-height: 1;
+	cursor: pointer;
+	border-radius: 5px;
+	&:hover{
+		background: $theme-color-light;
+	}
+	&:active{
+		box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+		font-size: 17px;
+	}
+}
+textarea.desc{
+	width: 100%;
+	height: 120px;
+	resize: none; 
+	border: 1px solid $border-color-1;
+	font-size: 18px;
+	padding: 15px;
+	font-weight: 300;
+	border-radius: 5px;
+}
+
+.container{
+	padding: 30px;
+}
+// template CSS 
+.header-1{
+	font-size: 32px;
+	margin-bottom: 30px;
+	color: $theme-color;
+}
+.header-large{
+	font-size: 32px;
+	margin-bottom: 30px;
+	color: #222;
+}
+// Header CSS
+
+header{
+	padding: 15px 30px;
+	background: $theme-color;
+	color: white;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: relative;
+
+	.logo{
+		font-size: 32px;
+		font-weight: 700;
+		text-shadow: 2px 2px 2px $shadow-1;
+		span{
+			font-weight: 300;
+		}
+	}
+
+	.notification{
+		position: absolute;
+    padding: 15px 30px;
+    background: rgba(3, 30, 47, 0.75);
+    border-radius: 5px;
+    color: #fff;
+    right: 10px;
+    top: 90px;
+		min-width: 300px;
+		max-width: 450px;
+		transform: translate3d(140%, 0, 0);
+		transition: transform 350ms ease-in-out;
+		cursor: pointer;
+		
+		&.success{
+			background: rgba(57, 191, 19, 0.75);
+			transform: translate3d(0, 0, 0);
+		}
+		&.warning{
+			background: rgba(191, 134, 19, 0.75);
+			transform: translate3d(0, 0, 0);
+		}
+		&.error{
+			background: rgba(191, 19, 19, 0.75);
+			transform: translate3d(0, 0, 0);
+		}
+		&:hover{
+			opacity: 0.65;
+		}
+	}
+
+	nav{
+		ul{
+			li{
+				display: inline-block;
+				margin-right: 20px;
+				&:last-of-type{
+					margin-right: 0;
+				}
+			}
+		}
+	}
+}
+// Header CSS
+
+// List CSS
+.list-container{
+	display: grid;
+	grid-template-columns: 30% 1fr;
+
+	.search-list{
+		grid-column-start: 1/2;
+		padding: 30px;
+		height: 100vh;
+		box-shadow: 0 0 10px $border-color-1;
+	}
+	.challenge-list{
+		grid-column-start: 2/3;
+		padding: 30px;
+		height: 100vh;
+		overflow-y: auto;
+
+		ul{
+			li{
+				padding: 15px;
+				border-bottom: 1px solid $border-color-2;
+				font-size: 16px;
+				color: #222;
+				cursor: pointer;
+				&:hover{
+					background: $hover-bg-color;
+				}
+			}
+		}
+	}
+}
+
+.create-new-challenge{
+	padding: 30px;
+	box-shadow: 0 0 10px $shadow-1;
+	p{
+		margin-bottom: 30px;
+		&:last-of-type{
+			margin-bottom: 0;
+		}
+	}
+	form{
+		display: grid;
+		grid-template-columns: 30% 1fr;
+		grid-column-gap: 30px;
+		grid-row-gap: 30px;
+		.details{
+			grid-column-start: 1/2;
+		}
+		.code{
+			grid-column-start: 2/3;
+		}
+	}
+}
+
+.ace_editor{
+	width: 100%;
+	height: 100%;
+	font-family: monospace!important;
+}
+.ace_content, .ace_text-layer, .ace_text-input, .ace_line{
+	font-family: monospace!important;
+}
+
+.code-editor{
+	margin: 30px 0;
+	height: 300px;
+}
+
+.flex-aside{
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.not-found{
+	display: flex;
+	height: 100vh;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	font-size: 36px;
+	font-weight: 600;
+	color: $border-color-1;
+	a{
+		color: $border-color-2;
+	}
+}
