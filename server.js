@@ -1,15 +1,19 @@
 var express = require('express'),
 	app = express(),
-	challenge = require('./server/models/models'),
+	model = require('./server/models/models'),
 	bodyParser = require('body-parser'),
 	mongoose = require('mongoose'),
-	fetch = require('node-fetch'),
-	jwt = require('jsonwebtoken'),
 	// Auth Packages
+	jwt = require('jsonwebtoken'),
 	session = require('express-session'),
 	passport = require('passport'),
-	MongoDBStore = require('connect-mongodb-session')(session),
-	PORT = process.env.PORT = 3300;
+	MongoDBStore = require('connect-mongodb-session')(session);
+
+require('dotenv').config();
+
+// Helpers and Utils
+const http = require('./lib/helpers/http');
+const urls = require('./lib/constants/urls');
 
 //Data base connection
 mongoose.Promise = global.Promise;
@@ -28,6 +32,7 @@ var sessionStore = new MongoDBStore({
 },
 	function (error) {
 		// Should have gotten an error
+		console.log("Error in Session Creation", error);
 	});
 
 //Session and Login Support by Passport
@@ -45,7 +50,7 @@ app.use(passport.session());
 // Templating engine
 app.set('view engine', 'pug');
 app.set('views', './dashboard/views');
-app.set('secretKey', 'topSecret');
+app.set('secretKey', process.env.SALT);
 app.set('dashboardView', './dashboard/views');
 
 // Static files server
@@ -64,14 +69,6 @@ function validateUser(req, res, next) {
 	});
 }
 
-//Validating Routes
-function validateRoute() {
-	return (req, res, next) => {
-		if (req.isAuthenticated()) return next();
-		res.redirect('/dashboard/login');
-	}
-}
-
 //Authenticated User
 app.use(function (req, res, next) {
 	res.locals.isAuthenticated = req.isAuthenticated();
@@ -86,62 +83,9 @@ app.use('/api', validateUser, api);
 var user = require('./routes/user');
 app.use('/api-user', user);
 
-// Pre Fetching Data
-const API_BASE = 'http://localhost:3300/api';
-let urls = {
-	list: API_BASE + '/list-log',
-	getLog: API_BASE + '/get-log',
-};
-
-const fetchData = (url, method, body, token) => {
-	return fetch(url, {
-		method: method, // *GET, POST, PUT, DELETE, etc.
-		mode: 'cors', // no-cors, *cors, same-origin
-		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-		credentials: 'same-origin', // include, *same-origin, omit
-		headers: {
-			'Content-Type': 'application/json',
-			'Access-token': token,
-			// 'Content-Type': 'application/x-www-form-urlencoded',
-		},
-		redirect: 'follow', // manual, *follow, error
-		referrer: 'no-referrer', // no-referrer, *client
-		body: body && JSON.stringify(body), // body data type must match "Content-Type" header
-	})
-		.then(response => response.json());
-}
-
-// View Routes
-app.get('/dashboard', validateRoute(), async (req, res) => {
-	console.log("User ===> ", req.user);
-	console.log("Token ===> ", req.session.token);
-	console.log("Logged in ===> ", req.isAuthenticated());
-
-	res.render("dashboard", {
-		showMenu: true,
-		// listData: data.data,
-		// count: data.total
-	});
-});
-
-app.get('/dashboard/login', (req, res) => {
-	res.render("login", {
-		showMenu: false
-	});
-})
-
-app.get('/logout', (req, res) => {
-	req.logout();
-	req.session.destroy();
-	res.render("login", {
-		showMenu: false
-	});
-})
-app.get('/register', (req, res) => {
-	res.render("register", {
-		showMenu: false
-	});
-})
+//View Routes
+var views = require('./routes/view');
+app.use('/', views);
 
 //Route not found
 app.use(function (req, res, next) {
@@ -158,5 +102,5 @@ app.use(function (err, req, res, next) {
 });
 
 //App Server
-app.listen(PORT);
-console.log("Now listening on ", PORT);
+app.listen(process.env.PORT);
+console.log("Now listening on ", process.env.PORT);
