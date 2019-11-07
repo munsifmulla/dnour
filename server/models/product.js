@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var CreateLog = new Schema({
+var CreateProduct = new Schema({
   name: {
     type: String,
     required: 'Kindly enter the name of the log'
@@ -20,4 +20,4 @@ var CreateLog = new Schema({
   }
 })
 
-module.exports = mongoose.model('logs', CreateLog);
+module.exports = mongoose.model('product', CreateProduct);

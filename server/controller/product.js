@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
-var challenge = mongoose.model('logs');
+var products = mongoose.model('products');
 
-exports.createLog = function (req, res) {
+exports.addProduct = function (req, res) {
   const new_log = new challenge(req.body);
   new_log.save(function (err, data) {
     if (err) {

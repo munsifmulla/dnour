@@ -1,6 +1,5 @@
 var express = require('express'),
 	app = express(),
-	model = require('./server/models/models'),
 	bodyParser = require('body-parser'),
 	mongoose = require('mongoose'),
 	// Auth Packages
@@ -75,11 +74,11 @@ app.use(function (req, res, next) {
 	next();
 })
 
-// PRIVATE API Routes
+// PRIVATE API Routes Requires Auth
 var api = require('./routes/api');
 app.use('/api', validateUser, api);
 
-//PUBLIC API Routes
+//PUBLIC API Routes Pre Auth
 var user = require('./routes/user');
 app.use('/api-user', user);
 
