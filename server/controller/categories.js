@@ -1,16 +1,17 @@
 var mongoose = require('mongoose');
-var size = require('../models/size');
+var category = require('../models/categories');
 
-exports.addSize = function (req, res) {
-  size.find({ name: req.body.type }, (err, data) => {
+exports.addCategory = function (req, res) {
+  category.find({ name: req.body.name }, (err, data) => {
+    console.log(data, 'Data')
     if (data.length > 0) {
-      res.status(422).json({ status: 422, message: 'Size type exists' })
+      res.status(422).json({ status: 422, message: 'Category Exists' })
     } else {
-      size.create(req.body, (err, data) => {
+      category.create(req.body, (err, data) => {
         if (err) {
           res.json({ status: 500, message: "Something went wrong", data: err });
         }
-        res.json({ status: 200, message: "New size created", data: data });
+        res.json({ status: 200, message: "Category Created", data: data });
       });
     }
   });
@@ -22,7 +23,7 @@ exports.editCategory = function (req, res) {
     if (count === 0) {
       res.status(404).json({ status: 404, message: 'Collection not found' })
     } else {
-      category.update({ _id: req.body.id }, { $set: req.body }, (err, data) => {
+      category.findOneAndUpdate({ _id: req.body.id }, { $set: req.body }, { new: true }, (err, data) => {
         if (err) {
           res.json({ status: 500, message: "Something went wrong", data: err });
         } else {
