@@ -1,96 +1,101 @@
 var mongoose = require('mongoose');
-var size = require('../models/size');
+var product = require('../models/product');
 
-exports.addSize = function (req, res) {
-  size.find({ name: req.body.type }, (err, data) => {
+exports.addProduct = function (req, res) {
+  product.find({ name: req.body.type }, (err, data) => {
     if (data.length > 0) {
-      res.status(422).json({ status: 422, message: 'Size type exists' })
+      res.status(422).json({ status: 422, message: 'Product type exists' })
     } else {
-      size.create(req.body, (err, data) => {
+      product.create(req.body, (err, data) => {
         if (err) {
           res.json({ status: 500, message: "Something went wrong", data: err });
         }
-        res.json({ status: 200, message: "New size created", data: data });
+        res.json({ status: 200, message: "New Product created", data: data });
       });
     }
   });
 };
 
-exports.editCategory = function (req, res) {
-  category.countDocuments(req.id, (err, count) => {
+exports.editProduct = function (req, res) {
+  product.countDocuments(req.id, (err, count) => {
     console.log(count, 'count');
     if (count === 0) {
-      res.status(404).json({ status: 404, message: 'Collection not found' })
+      res.status(404).json({ status: 404, message: 'Product not found' })
     } else {
-      category.update({ _id: req.body.id }, { $set: req.body }, (err, data) => {
+      product.findOneAndUpdate({ _id: req.body.id }, { $set: req.body }, { new: true }, (err, data) => {
         if (err) {
           res.json({ status: 500, message: "Something went wrong", data: err });
         } else {
-          res.json({ status: 200, message: "Category Updated", data: data });
+          res.json({ status: 200, message: "Product Updated", data: data });
+        }
+      })
+        .populate('category size');
+    }
+  })
+};
+
+exports.deleteProduct = function (req, res) {
+  product.countDocuments({ _id: req.body.id }, (err, count) => {
+    console.log(count, 'count');
+    if (count === 0) {
+      res.status(404).json({ status: 404, message: 'Product not found' })
+    } else {
+      product.deleteOne({ _id: req.body.id }, (err, data) => {
+        if (err) {
+          res.json({ status: 500, message: "Something went wrong", data: err });
+        } else {
+          res.json({ status: 200, message: "Product Deleted", data: data });
         }
       });
     }
   })
 };
 
-exports.deleteCategory = function (req, res) {
-  category.countDocuments({ _id: req.body.id }, (err, count) => {
-    console.log(count, 'count');
-    if (count === 0) {
-      res.status(404).json({ status: 404, message: 'Category not found' })
-    } else {
-      category.deleteOne({ _id: req.body.id }, (err, data) => {
-        if (err) {
-          res.json({ status: 500, message: "Something went wrong", data: err });
-        } else {
-          res.json({ status: 200, message: "Category Deleted", data: data });
-        }
-      });
-    }
-  })
-};
-
-exports.searchCategory = function (req, res) {
+exports.searchProducts = function (req, res) {
   const regex = new RegExp(req.body.text);
-  category.find({ name: regex }, (err, data) => {
+  product.find({ name: regex }, (err, data) => {
     if (err) {
       res.json({ status: 500, message: "Something went wrong", data: err });
     } else {
-      res.json({ status: 200, message: "Category Deleted", data: data });
+      res.json({ status: 200, message: "Product found", data: data });
     }
-  });
+  })
+    .populate('category size');
 };
 
-exports.getAllCategories = function (req, res) {
-  category.find({}, (err, data) => {
-    if (err) {
-      res.json({ status: 500, message: "Something went wrong", data: err });
-    } else {
-      if (data.length > 0) {
-        res.json({ status: 200, message: "Category found", data: data });
+exports.getAllProducts = function (req, res) {
+  product.find()
+    .populate('category size')
+    .exec((err, data) => {
+      if (err) {
+        res.json({ status: 500, message: "Something went wrong", data: err });
+      } else {
+        if (data.length > 0) {
+          res.json({ status: 200, message: "Product found", data: data });
+        }
+        else {
+          res.json({ status: 304, message: "No Product found", data: data });
+        }
       }
-      else {
-        res.json({ status: 304, message: "No Category found", data: data });
-      }
-    }
-  });
+    })
 }
 
-function getCategoryById(id, res) {
+function getProductById(id, res) {
   console.log(id, 'count');
-  category.countDocuments({ _id: id }, (err, count) => {
+  product.countDocuments({ _id: id }, (err, count) => {
     if (count > 0) {
-      category.findById(id, (err, data) => {
+      product.findById(id, (err, data) => {
         if (err) {
           return res.json({ status: 500, message: "Something went wrong", data: err });
         } else {
-          return res.json({ status: 200, message: "Category found", data: data });
+          return res.json({ status: 200, message: "Product found", data: data });
         }
-      });
+      })
+        .populate('category size');
     } else {
-      return res.json({ status: 304, message: "No Category found", data: err });
+      return res.json({ status: 304, message: "No Product found", data: err });
     }
   });
 }
 
-exports.getCategoryById = (req, res) => getCategoryById(req.params.id, res);
+exports.getProductById = (req, res) => getProductById(req.params.id, res);
