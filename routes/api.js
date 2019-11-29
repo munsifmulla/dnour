@@ -5,6 +5,7 @@ var category = require('../server/controller/categories');
 var size = require('../server/controller/sizes');
 var product = require('../server/controller/product');
 var productCADFile = require('../server/controller/productCADFile');
+var productImage = require('../server/controller/productImages');
 var user = require('../server/controller/user');
 
 // Admin Users
@@ -43,6 +44,14 @@ router.delete('/product-cad-file/delete', productCADFile.deleteProductCADFile);
 router.get('/product-cad-file/all', productCADFile.getAllProductCADFiles);
 router.get('/product-cad-file/:id', productCADFile.getProductCADFilesById);
 router.post('/product-cad-file/search', productCADFile.searchProductCADFiles);
+
+// Product Images
+router.post('/product-image/add', productImage.addProductImage);
+router.post('/product-image/edit', productImage.editProductImage);
+router.delete('/product-image/delete', productImage.deleteProductImage);
+router.get('/product-image/all', productImage.getAllProductImages);
+router.get('/product-image/:id', productImage.getProductImageById);
+router.post('/product-image/search', productImage.searchProductImage);
 
 // Sizes
 router.post('/product-size/add', size.addSize);
