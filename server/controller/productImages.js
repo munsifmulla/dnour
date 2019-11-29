@@ -4,7 +4,7 @@ var productImages = require('../models/productImages');
 exports.addProductImage = function (req, res) {
   productImages.find({ url: req.body.url }, (err, data) => {
     if (data.length > 0) {
-      res.status(422).json({ status: 422, message: 'Image file exists' })
+      res.status(422).json({ status: 422, message: 'Image file name exists' })
     } else {
       productImages.create(req.body, (err, data) => {
         if (err) {
