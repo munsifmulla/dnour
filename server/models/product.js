@@ -13,7 +13,8 @@ var CreateProduct = new Schema({
   },
   collection_id: {
     type: ObjectId,
-    required: 'Add your code'
+    required: 'Add your code',
+    ref: 'collection'
   },
   category: {
     type: ObjectId,

@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var product = require('../models/product');
+var productDescription = require('../models/productDesc');
+var productImages = require('../models/productImages');
 
 exports.addProduct = function (req, res) {
   product.find({ name: req.body.type }, (err, data) => {
@@ -29,7 +31,7 @@ exports.editProduct = function (req, res) {
           res.json({ status: 200, message: "Product Updated", data: data });
         }
       })
-        .populate('category size');
+        .populate('category size collection');
     }
   })
 };
@@ -37,16 +39,25 @@ exports.editProduct = function (req, res) {
 exports.deleteProduct = function (req, res) {
   product.countDocuments({ _id: req.body.id }, (err, count) => {
     console.log(count, 'count');
+    var pr_id = req.body.id;
     if (count === 0) {
       res.status(404).json({ status: 404, message: 'Product not found' })
     } else {
-      product.deleteOne({ _id: req.body.id }, (err, data) => {
-        if (err) {
-          res.json({ status: 500, message: "Something went wrong", data: err });
-        } else {
-          res.json({ status: 200, message: "Product Deleted", data: data });
-        }
-      });
+      return Promise.all([
+        productDescription.deleteOne({ product_id: pr_id })
+          .exec(),
+        productImages.deleteOne({ product_id: pr_id })
+          .exec(),
+      ])
+        .then(function () {
+          product.deleteOne({ _id: pr_id }, (err, data) => {
+            if (err) {
+              res.json({ status: 500, message: "Something went wrong", data: err });
+            } else {
+              res.json({ status: 200, message: "Product Deleted", data: data });
+            }
+          });
+        });
     }
   })
 };
@@ -81,19 +92,34 @@ exports.getAllProducts = function (req, res) {
 }
 
 function getProductById(id, res) {
-  console.log(id, 'count');
   product.countDocuments({ _id: id }, (err, count) => {
+    var pr_id;
     if (count > 0) {
       product.findById(id, (err, data) => {
         if (err) {
           return res.json({ status: 500, message: "Something went wrong", data: err });
         } else {
-          return res.json({ status: 200, message: "Product found", data: data });
+          // console.log('product data', data);
+          pr_id = data._id;
+          return Promise.all([
+            data,
+            productDescription.find({ product_id: pr_id })
+              .exec(),
+            productImages.find({ product_id: pr_id })
+              .exec(),
+          ])
+            .then(function (pr_data) {
+              var product = {};
+              product.details = pr_data[0];
+              product.description = pr_data[1][0];
+              product.images = pr_data[2];
+              return res.json({ status: 200, message: "Product found", data: product });
+            });
         }
       })
-        .populate('category size');
+        .populate('category size collection');
     } else {
-      return res.json({ status: 304, message: "No Product found", data: err });
+      return res.json({ status: 404, message: "No Product found", data: err });
     }
   });
 }

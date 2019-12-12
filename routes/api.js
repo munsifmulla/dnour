@@ -4,6 +4,7 @@ var collection = require('../server/controller/collections');
 var category = require('../server/controller/categories');
 var size = require('../server/controller/sizes');
 var product = require('../server/controller/product');
+var productDescription = require('../server/controller/productDesc');
 var productCADFile = require('../server/controller/productCADFile');
 var productImage = require('../server/controller/productImages');
 var user = require('../server/controller/user');
@@ -36,6 +37,12 @@ router.delete('/product/delete', product.deleteProduct);
 router.get('/product/all', product.getAllProducts);
 router.get('/product/:id', product.getProductById);
 router.post('/product/search', product.searchProducts);
+
+// Product Desc
+router.post('/product-description/add', productDescription.addProductDesc);
+router.post('/product-description/edit', productDescription.editProductDesc);
+router.delete('/product-description/delete', productDescription.deleteProductDesc);
+router.get('/product-description/:id', productDescription.getProductDescById);
 
 // Product CAD File
 router.post('/product-cad-file/add', productCADFile.addProductCADFile);
