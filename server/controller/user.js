@@ -49,7 +49,7 @@ exports.loginUser = (req, res, next) => {
           res.status(200).json({ status: 200, message: "user found!!!", data: { user: data.name, token: token } });
         });
       } else {
-        res.status(304).json({ status: 304, message: "Invalid email / password", data: null });
+        res.status(200).json({ status: 304, message: "Invalid email / password", data: null });
       }
     }
   });
