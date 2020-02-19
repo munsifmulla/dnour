@@ -33,7 +33,7 @@ block append scripts
 				e.preventDefault();
 				const validated = fn.validateForm(form.elements);
 				if(validated){
-					fn.post(fn.urls.registerUser, fn.serializeForm(form.elements), false)
+					fn.post(urls.registerUser, fn.serializeForm(form.elements), false)
 					.then((data) => {
 						if(data.status === 200){
 							localStorage.setItem("access-token", data.data.token);

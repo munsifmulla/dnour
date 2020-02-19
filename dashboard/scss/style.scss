@@ -177,49 +177,6 @@ header{
 	}
 }
 
-.create-new-challenge{
-	padding: 30px;
-	box-shadow: 0 0 10px $shadow-1;
-	p{
-		margin-bottom: 30px;
-		&:last-of-type{
-			margin-bottom: 0;
-		}
-	}
-	form{
-		display: grid;
-		grid-template-columns: 30% 1fr;
-		grid-column-gap: 30px;
-		grid-row-gap: 30px;
-		.details{
-			grid-column-start: 1/2;
-		}
-		.code{
-			grid-column-start: 2/3;
-		}
-	}
-}
-
-.ace_editor{
-	width: 100%;
-	height: 100%;
-	font-family: monospace!important;
-}
-.ace_content, .ace_text-layer, .ace_text-input, .ace_line{
-	font-family: monospace!important;
-}
-
-.code-editor{
-	margin: 30px 0;
-	height: 300px;
-}
-
-.flex-aside{
-	display: flex;
-	justify-content: space-between;
-	width: 100%;
-}
-
 .not-found{
 	display: flex;
 	height: 100vh;
@@ -231,5 +188,18 @@ header{
 	color: $border-color-1;
 	a{
 		color: $border-color-2;
+	}
+}
+
+.app-main{
+	display: flex;
+	justify-content: space-between;
+	overflow: hidden;
+	
+	.slider-menu{
+		width: 200px;
+	}
+	.main-page{
+		width: 100vw;
 	}
 }

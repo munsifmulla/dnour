@@ -27,12 +27,12 @@ block append scripts
 			
 			form.addEventListener('submit', (e) => {
 				e.preventDefault();
-				fn.post(fn.urls.loginUser, fn.serializeForm(form.elements), false)
+				fn.post(urls.loginUser, fn.serializeForm(form.elements), false)
 				.then((data) => {
 					if(data.status === 200){
 						localStorage.setItem("access-token", data.data.token);
 						fn.notification("success", "Login success", data.message, 1500);
-						setTimeout(() => {window.location.href = "/dashboard"}, 1500);
+						setTimeout(() => {window.location.href = variables.APP_PATH+"dashboard"}, 1500);
 					}else{
 						fn.notification("error", "Login error", data.message, 1500);
 					}

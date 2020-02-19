@@ -2,9 +2,10 @@ extends layouts/generic
 
 block title
 	title #{projectName } | Dashboard
-block content
-	include ./partials/header.pug
-	+header(showMenu)
-	div.list-container
+
+append content
+append mainPage
+		h2 Pages here
+		h3 Description jere
 	
-	block append scripts
+block append scripts

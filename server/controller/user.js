@@ -73,8 +73,8 @@ exports.generateUser = (req, res, next) => {
           console.log(error, 'Error in create');
           next(error);
         } else {
-          const mail = sendEmail(randPass);
-          console.log(mail, 'Mail Sent');
+          // const mail = sendEmail(randPass);
+          console.log(randPass, 'Mail Sent');
           res.json({ status: 200, message: "User created successfully", data: {} });
         }
       });

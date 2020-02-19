@@ -129,40 +129,6 @@ header {
       .list-container .challenge-list ul li:hover {
         background: #eaeaea; }
 
-.create-new-challenge {
-  padding: 30px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); }
-  .create-new-challenge p {
-    margin-bottom: 30px; }
-    .create-new-challenge p:last-of-type {
-      margin-bottom: 0; }
-  .create-new-challenge form {
-    display: grid;
-    grid-template-columns: 30% 1fr;
-    grid-column-gap: 30px;
-    grid-row-gap: 30px; }
-    .create-new-challenge form .details {
-      grid-column-start: 1/2; }
-    .create-new-challenge form .code {
-      grid-column-start: 2/3; }
-
-.ace_editor {
-  width: 100%;
-  height: 100%;
-  font-family: monospace !important; }
-
-.ace_content, .ace_text-layer, .ace_text-input, .ace_line {
-  font-family: monospace !important; }
-
-.code-editor {
-  margin: 30px 0;
-  height: 300px; }
-
-.flex-aside {
-  display: flex;
-  justify-content: space-between;
-  width: 100%; }
-
 .not-found {
   display: flex;
   height: 100vh;
@@ -174,3 +140,12 @@ header {
   color: #8d8d8d; }
   .not-found a {
     color: #c7c7c7; }
+
+.app-main {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden; }
+  .app-main .slider-menu {
+    width: 200px; }
+  .app-main .main-page {
+    width: 100vw; }

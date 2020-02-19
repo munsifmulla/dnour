@@ -53,8 +53,8 @@ app.set('secretKey', process.env.SALT);
 app.set('dashboardView', './dashboard/views');
 
 // Static files server
-app.use(express.static('./dashboard/css'));
-app.use(express.static('./dashboard/js'));
+app.use(express.static('./dashboard/css', { maxAge: 31557600 }));
+app.use(express.static('./dashboard/js', { maxAge: 31557600 }));
 
 //Auth validating user
 function validateUser(req, res, next) {
@@ -71,6 +71,7 @@ function validateUser(req, res, next) {
 //Authenticated User
 app.use(function (req, res, next) {
 	res.locals.isAuthenticated = req.isAuthenticated();
+	res.locals.env = process.env;
 	next();
 })
 
@@ -96,7 +97,7 @@ app.use(function (err, req, res, next) {
 		res.status(404).json({ message: "Not found" });
 	else {
 		console.log(err, "Err");
-		res.status(500).json({ message: "Something looks wrong :( !!!" });
+		res.status(500).json("Something looks wrong :( !!!");
 	}
 });
 

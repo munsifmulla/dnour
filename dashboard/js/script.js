@@ -1,14 +1,18 @@
-const API_BASE = 'http://localhost:3300/';
+
+var variables = {
+  APP_PATH: document.querySelector('.app-path').value,
+  API_BASE: document.querySelector('.project-path').value
+};
+
+var urls = {
+  list: variables.API_BASE + 'api/list-log',
+  search: variables.API_BASE + 'api/find-log',
+  create: variables.API_BASE + 'api/create-log',
+  registerUser: variables.API_BASE + 'api-user/register',
+  loginUser: variables.API_BASE + 'api-user/login'
+};
 
 var fn = {
-  urls: {
-    list: API_BASE + 'api/list-log',
-    search: API_BASE + 'api/find-log',
-    create: API_BASE + 'api/create-log',
-    registerUser: API_BASE + 'api-user/register',
-    loginUser: API_BASE + 'api-user/login'
-  },
-
   //valiating forms
   validateForm: (form) => {
     const voidTypes = ['button', 'submit'];
@@ -136,14 +140,14 @@ var fn = {
     var elem = document.querySelector('.search-challenge');
     var list = document.querySelector('.challenge-list-container');
     elem.addEventListener('keyup', (e) => {
-      fn.post(fn.urls.search, { name: e.target.value }, true)
+      fn.post(urls.search, { name: e.target.value }, true)
         .then((response) => {
           list.innerHTML = '';
           response.data.map(item => {
             let listItem = document.createElement('LI');
             let anchor = document.createElement('A');
             let listContent = document.createTextNode(item.name);
-            anchor.setAttribute('href', `/log/${item._id}`)
+            anchor.setAttribute('href', `/log/${ item._id }`)
             anchor.appendChild(listContent);
             listItem.appendChild(anchor);
             list.append(listItem);
@@ -154,7 +158,7 @@ var fn = {
 
   getLogs: () => {
     var list = document.querySelector('.challenge-list-container');
-    fn.get(fn.urls.list, 'GET', {}, true)
+    fn.get(urls.list, 'GET', {}, true)
       .then((response) => {
         if (response.status === 200) {
           list.innerHTML = '';
@@ -162,7 +166,7 @@ var fn = {
             let listItem = document.createElement('LI');
             let anc = document.createElement('A');
             let listContent = document.createTextNode(item.name);
-            anc.setAttribute('href', `/log/${item._id}`)
+            anc.setAttribute('href', `/log/${ item._id }`)
             anc.appendChild(listContent);
             listItem.appendChild(anc);
             list.append(listItem);

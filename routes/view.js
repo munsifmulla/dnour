@@ -17,7 +17,7 @@ router.get('/dashboard', validateRoute(), async (req, res) => {
 
     res.render("dashboard", {
         projectName: process.env.PROJECT_NAME,
-        showMenu: true,
+        showMenu: false,
         // listData: data.data,
         // count: data.total
     });

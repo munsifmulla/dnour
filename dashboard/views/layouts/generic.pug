@@ -1,3 +1,5 @@
+include ../partials/header.pug
+include ../partials/sliderMenu.pug
 html
 	head
 		meta(charset="UTF-8")
@@ -5,18 +7,33 @@ html
 		meta(http-equiv="X-UA-Compatible", content="ie=edge")
 		
 		block pluginStyles
-			link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
+			//- link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
 		block styles
-			link(rel='stylesheet', href='/style.css')
+			link(rel='stylesheet', href=env.APP_PATH+'style.css')
 		block title
 	body
 		block content
+			.app-main
+				block slidermenu
+					+sliderMenu
+
+				.main-page
+					block mainPage
+						+header(true)
+
+
 		block footer
+
+		block hiddenVariables
+			input(type='hidden', value=env.PROJECT_PATH, class="project-path")
+			input(type='hidden', value=env.APP_PATH, class="app-path")
+
 		block pluginScripts
 			script(
 				src="https://code.jquery.com/jquery-3.4.1.min.js", 
 				integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=", 
 				crossorigin="anonymous"
 			)
+
 		block scripts
-			script(src="/script.js")
+			script(src=env.APP_PATH+"script.js")
