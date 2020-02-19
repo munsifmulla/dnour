@@ -1,6 +1,6 @@
 mixin header(show)
   header
-    a(href="/dashboard").logo Dnour &nbsp;
+    a(href=env.APP_PATH+"dashboard").logo Dnour &nbsp;
       span | admin panel
       if(show)
         nav
@@ -11,10 +11,10 @@ mixin header(show)
             //-   a(href="/create") Create new
             if(isAuthenticated)
               li 
-              a(href="/logout") Logout
+              a(href=env.APP_PATH+"logout") Logout
             else
               li 
-              a(href="/login") Login
+              a(href=env.APP_PATH+"login") Login
 
     div.notification
       h4.
