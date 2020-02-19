@@ -5,7 +5,7 @@ var router = express.Router();
 function validateRoute() {
     return (req, res, next) => {
         if (req.isAuthenticated()) return next();
-        res.redirect('/dashboard/login');
+        res.redirect(env.APP_PATH + 'dashboard/login');
     }
 }
 
