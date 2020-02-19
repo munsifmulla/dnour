@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
+require('dotenv').config();
 //Validating Routes
 function validateRoute() {
     return (req, res, next) => {
         if (req.isAuthenticated()) return next();
-        res.redirect(env.APP_PATH + 'dashboard/login');
+        res.redirect(process.env.APP_PATH + 'dashboard/login');
     }
 }
 
