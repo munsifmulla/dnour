@@ -1,5 +1,6 @@
 var express = require('express'),
 	app = express(),
+	cors = require('cors'),
 	bodyParser = require('body-parser'),
 	mongoose = require('mongoose'),
 	// Auth Packages
@@ -9,6 +10,9 @@ var express = require('express'),
 	MongoDBStore = require('connect-mongodb-session')(session);
 
 require('dotenv').config();
+
+//Using Cors
+app.use(cors());
 
 // Helpers and Utils
 const http = require('./lib/helpers/http');
