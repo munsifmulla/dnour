@@ -12,6 +12,7 @@ var express = require('express'),
 require('dotenv').config();
 
 //Using Cors
+app.options('*', cors());
 var allowedOrigins = ['http://localhost:3300', 'http://dnour.com', 'https://dnour.com'];
 app.use(cors({
 	origin: function (origin, callback) {
