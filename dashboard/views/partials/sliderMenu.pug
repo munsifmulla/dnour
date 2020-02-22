@@ -1,5 +1,19 @@
-mixin sliderMenu 
+mixin sliderMenu
+  link(rel="stylesheet", href=env.APP_PATH+"sliderMenu.css")
   div.slider-menu
-    ul
-      li Category
-      li Product
+    //- div.slider-menu-switch
+    div.sliderMenu-container
+      a(href=env.APP_PATH+"dashboard")
+        img(src=env.APP_PATH+"dnour_main_logo.png", class="logo-image" alt="Dnour Dubai")
+      ul
+        li
+          a(href=env.APP_PATH+'dashboard/collections') Collection
+        li
+          a(href="/") Category
+        li
+          a(href="/") Products
+      
+    div.version-number
+      span 
+        a(href="/") dnour.com 
+        span V - #{env.APP_VERSION}

@@ -1,20 +1,24 @@
 mixin header(show)
+  link(rel="stylesheet", href=env.APP_PATH+"header.css")
   header
-    a(href=env.APP_PATH+"dashboard").logo Dnour &nbsp;
-      span | admin panel
-      if(show)
-        nav
-          ul
-            //- li 
-            //-   a(href="/dashboard") List
-            //- li
-            //-   a(href="/create") Create new
-            if(isAuthenticated)
-              li 
-              a(href=env.APP_PATH+"logout") Logout
-            else
-              li 
-              a(href=env.APP_PATH+"login") Login
+    span.dnour-logo
+      if !show
+        img(src="dnour_logo.png", alt="Dnour.com")
+        span.title D'nour | &nbsp;
+      span.title admin panel 
+    if(show)
+      nav
+        ul
+          //- li 
+          //-   a(href="/dashboard") List
+          //- li
+          //-   a(href="/create") Create new
+          if(isAuthenticated)
+            li 
+            a(href=env.APP_PATH+"logout") Logout
+          else
+            li 
+            a(href=env.APP_PATH+"login") Login
 
     div.notification
       h4.

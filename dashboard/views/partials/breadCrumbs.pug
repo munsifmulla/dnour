@@ -1,0 +1,6 @@
+mixin breadCrumbs(data)
+  section.bread-crumbs
+    ul
+     each val in data
+      li
+        a(href=val.link)= val.name

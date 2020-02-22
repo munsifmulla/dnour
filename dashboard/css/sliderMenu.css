@@ -1,0 +1,51 @@
+.app-main .slider-menu {
+  width: 300px;
+  background: #000000;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative; }
+  .app-main .slider-menu .slider-menu-switch {
+    width: 35px;
+    height: 35px;
+    border-top: 1px solid #c7c7c7;
+    border-right: 1px solid #c7c7c7;
+    transform: rotate(-135deg) scale(0.5);
+    position: absolute;
+    left: 15px;
+    top: 75px;
+    cursor: pointer; }
+  .app-main .slider-menu .sliderMenu-container {
+    width: 100%;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column; }
+    .app-main .slider-menu .sliderMenu-container .logo-image {
+      width: 120px;
+      margin: 30px; }
+    .app-main .slider-menu .sliderMenu-container ul {
+      width: 100%; }
+      .app-main .slider-menu .sliderMenu-container ul li {
+        text-align: left;
+        color: #ffffff;
+        border-bottom: 1px solid #c7c7c7; }
+        .app-main .slider-menu .sliderMenu-container ul li:last-of-type {
+          border-bottom: none; }
+        .app-main .slider-menu .sliderMenu-container ul li a {
+          color: inherit;
+          padding: 15px 0 15px 30px;
+          font-size: 16px;
+          display: block; }
+        .app-main .slider-menu .sliderMenu-container ul li:hover {
+          background: #222222; }
+  .app-main .slider-menu .version-number {
+    padding: 10px 0;
+    text-align: center;
+    border-top: 1px solid #c7c7c7;
+    width: 100%;
+    color: #ffffff;
+    height: 40px;
+    font-size: 12px; }

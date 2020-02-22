@@ -39,6 +39,10 @@ input[type="text"], input[type="password"], input[type="submit"]{
 	padding: 15px;
 	font-weight: 300;
 	border-radius: 5px;
+	&:disabled{
+		opacity: 0.4;
+		cursor: not-allowed;
+	}
 }
 
 input[type="submit"]{
@@ -80,71 +84,6 @@ textarea.desc{
 	margin-bottom: 30px;
 	color: #222;
 }
-// Header CSS
-
-header{
-	padding: 15px 30px;
-	background: $theme-color;
-	color: white;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	position: relative;
-
-	.logo{
-		font-size: 32px;
-		font-weight: 700;
-		text-shadow: 2px 2px 2px $shadow-1;
-		span{
-			font-weight: 300;
-		}
-	}
-
-	.notification{
-		position: absolute;
-    padding: 15px 30px;
-    background: rgba(3, 30, 47, 0.75);
-    border-radius: 5px;
-    color: #fff;
-    right: 10px;
-    top: 90px;
-		min-width: 300px;
-		max-width: 450px;
-		transform: translate3d(140%, 0, 0);
-		transition: transform 350ms ease-in-out;
-		cursor: pointer;
-		
-		&.success{
-			background: rgba(57, 191, 19, 0.75);
-			transform: translate3d(0, 0, 0);
-		}
-		&.warning{
-			background: rgba(191, 134, 19, 0.75);
-			transform: translate3d(0, 0, 0);
-		}
-		&.error{
-			background: rgba(191, 19, 19, 0.75);
-			transform: translate3d(0, 0, 0);
-		}
-		&:hover{
-			opacity: 0.65;
-		}
-	}
-
-	nav{
-		ul{
-			li{
-				display: inline-block;
-				margin-right: 20px;
-				&:last-of-type{
-					margin-right: 0;
-				}
-			}
-		}
-	}
-}
-// Header CSS
-
 // List CSS
 .list-container{
 	display: grid;
@@ -177,6 +116,68 @@ header{
 	}
 }
 
+//Pages
+.page{
+	padding: 30px;
+	
+	.add-new{
+		position: absolute;
+		right: 30px;
+    margin-top: -8px;
+		a{
+			display: block;
+			border-radius: 30px;
+			line-height: 3.2;
+			padding: 0 30px;
+			background: $gold;
+			height: 50px;
+			text-shadow: 1px 1px 1px $shadow-1;
+			color: $white;
+			
+			&:hover{
+				box-shadow: 0 2px 5px $shadow-1;
+			}
+		}
+	}
+}
+//Pages
+
+//Bread Crumbs
+.bread-crumbs{
+	font-size: 13px;
+	margin-bottom: 30px;
+	ul{
+		width: 100%;
+		display: flex;
+		li{
+			padding-right: 30px;
+			position: relative;
+			&:before{
+				content: '';
+				width: 10px; height: 10px;
+				border-top: 1px solid $gold;
+				border-right: 1px solid $gold;
+				position: absolute;
+				right: 12px;
+				transform: rotate(45deg) scale(.7);
+				top: 4px;
+			}
+			a{
+				color: $gold;
+			}
+			&:last-of-type{
+				&:before{
+					display: none;
+				}
+				a{
+					pointer-events: none;
+					color: $theme-color-light;
+				}
+			}
+		}
+	}
+}
+//Bread Crumbs
 .not-found{
 	display: flex;
 	height: 100vh;
@@ -195,10 +196,7 @@ header{
 	display: flex;
 	justify-content: space-between;
 	overflow: hidden;
-	
-	.slider-menu{
-		width: 200px;
-	}
+
 	.main-page{
 		width: 100vw;
 	}

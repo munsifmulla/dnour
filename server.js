@@ -72,6 +72,7 @@ app.set('dashboardView', './dashboard/views');
 // Static files server
 app.use(express.static('./dashboard/css', { maxAge: 31557600 }));
 app.use(express.static('./dashboard/js', { maxAge: 31557600 }));
+app.use(express.static('./dashboard/images', { maxAge: 31557600 }));
 
 //Auth validating user
 function validateUser(req, res, next) {

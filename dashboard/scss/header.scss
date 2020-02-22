@@ -1,0 +1,73 @@
+@import './vars';
+// Header CSS
+
+header{
+	padding: 15px 30px;
+	background: $theme-color;
+	color: white;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+  position: relative;
+  
+  .dnour-logo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    img{
+      width: 60px;
+      margin-right: 15px;
+    }
+  }
+
+	.title{
+		font-size: 28px;
+		text-shadow: 2px 2px 2px $shadow-1;
+		color: $gold;
+		font-weight: 300;
+	}
+
+	.notification{
+		position: absolute;
+    padding: 15px 30px;
+    background: rgba(3, 30, 47, 0.75);
+    border-radius: 5px;
+    color: #fff;
+    right: 10px;
+    top: 90px;
+		min-width: 300px; 
+		max-width: 450px;
+		transform: translate3d(140%, 0, 0);
+		transition: transform 350ms ease-in-out;
+		cursor: pointer;
+		
+		&.success{
+			background: rgba(57, 191, 19, 0.75);
+			transform: translate3d(0, 0, 0);
+		}
+		&.warning{
+			background: rgba(191, 134, 19, 0.75);
+			transform: translate3d(0, 0, 0);
+		}
+		&.error{
+			background: rgba(191, 19, 19, 0.75);
+			transform: translate3d(0, 0, 0);
+		}
+		&:hover{
+			opacity: 0.65;
+		}
+	}
+
+	nav{
+		ul{
+			li{
+				display: inline-block;
+				margin-right: 20px;
+				&:last-of-type{
+					margin-right: 0;
+				}
+			}
+		}
+	}
+}
+// Header CSS

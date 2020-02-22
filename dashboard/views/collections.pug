@@ -1,5 +1,6 @@
 extends layouts/generic
 include ./partials/breadCrumbs.pug
+include ./partials/addNew.pug
 
 block title
 	title #{projectName } | Dashboard
@@ -7,6 +8,7 @@ append content
 append mainPage
 	section.page.dashboard
 		+breadCrumbs(breadCrumbs)
-		h2 Dashboard
+		+addNew({link: env.APP_PATH+'dashboard/collection/new', name: 'Collection'})
+		h2 Collections
 	
 block append scripts

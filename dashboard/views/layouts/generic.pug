@@ -10,6 +10,7 @@ html
 			//- link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
 		block styles
 			link(rel='stylesheet', href=env.APP_PATH+'style.css')
+
 		block title
 	body
 		block content
@@ -29,11 +30,11 @@ html
 			input(type='hidden', value=env.APP_PATH, class="app-path")
 
 		block pluginScripts
-			script(
-				src="https://code.jquery.com/jquery-3.4.1.min.js", 
-				integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=", 
-				crossorigin="anonymous"
-			)
+			//- script(
+			//- 	src="https://code.jquery.com/jquery-3.4.1.min.js", 
+			//- 	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=", 
+			//- 	crossorigin="anonymous"
+			//- )
 
 		block scripts
 			script(src=env.APP_PATH+"script.js")
