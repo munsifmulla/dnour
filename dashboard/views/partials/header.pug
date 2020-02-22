@@ -3,7 +3,7 @@ mixin header(show)
   header
     span.dnour-logo
       if !show
-        img(src="dnour_logo.png", alt="Dnour.com")
+        img(src=env.APP_PATH+"dnour_logo.png", alt="Dnour.com")
         span.title D'nour | &nbsp;
       span.title admin panel 
     if(show)
