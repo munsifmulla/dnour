@@ -9,6 +9,7 @@ var productCADFile = require('../server/controller/productCADFile');
 var productImage = require('../server/controller/productImages');
 var user = require('../server/controller/user');
 var wishlist = require('../server/controller/wishlist');
+var cart = require('../server/controller/cart');
 
 // Admin Users
 router.post('/generate-user', user.generateUser);
@@ -73,5 +74,10 @@ router.post('/product-size/search', size.searchSize);
 router.post('/user-wishlist/add', wishlist.addProduct);
 router.get('/user-wishlist', wishlist.getAllProducts);
 router.delete('/user-wishlist/delete', wishlist.deleteProduct);
+
+// cart
+router.post('/cart/update', cart.addToCart);
+router.delete('/cart/delete', cart.deleteFromCart);
+router.get('/cart/get-cart/:id', cart.getAllCartItems);
 
 module.exports = router;

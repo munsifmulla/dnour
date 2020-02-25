@@ -1,4 +1,4 @@
 extends layouts/generic
 
 block content
-    h4(class="not-found") You seem to be lost, &nbsp; #[a(href="/dashboard") click ] &nbsp; here to go back home.
+    h4(class="not-found") You seem to be lost, &nbsp; #[a(href=env.APP_PATH+"dashboard") click ] &nbsp; here to go back home.

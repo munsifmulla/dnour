@@ -117,7 +117,7 @@ function getProductById(id, res) {
             });
         }
       })
-        .populate('category size collection');
+        .populate('collection category size');
     } else {
       return res.json({ status: 404, message: "No Product found", data: err });
     }

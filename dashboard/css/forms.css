@@ -1,0 +1,38 @@
+.form-holder {
+  padding: 15px 0;
+  margin: 30px 0; }
+  .form-holder.div-2 {
+    width: 49%;
+    margin-right: 2%; }
+    .form-holder.div-2:last-of-type {
+      margin-right: 0; }
+  .form-holder.div-3 {
+    width: 32%;
+    margin-right: 2%; }
+    .form-holder.div-3:last-of-type {
+      margin-right: 0; }
+  .form-holder.div-4 {
+    width: 23.5%;
+    margin-right: 2%; }
+    .form-holder.div-4:last-of-type {
+      margin-right: 0; }
+  .form-holder.auto-width {
+    width: fit-content;
+    margin-right: 25px;
+    padding: 0 30px; }
+    .form-holder.auto-width:last-of-type {
+      margin-right: 0; }
+  .form-holder .form p {
+    margin-bottom: 20px; }
+    .form-holder .form p.flex {
+      display: flex; }
+      .form-holder .form p.flex.row {
+        flex-direction: row; }
+      .form-holder .form p.flex.column {
+        flex-direction: column; }
+      .form-holder .form p.flex.right {
+        justify-content: flex-end; }
+      .form-holder .form p.flex.left {
+        justify-content: flex-start; }
+      .form-holder .form p.flex.center {
+        justify-content: center; }

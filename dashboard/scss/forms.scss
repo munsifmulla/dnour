@@ -1,0 +1,15 @@
+@import './vars';
+@import './mixins';
+
+.form-holder{
+  padding: 15px 0;
+  margin: 30px 0;
+  @include Grids;
+
+  .form{
+    p{
+      margin-bottom: 20px;
+      @include flex;
+    }
+  }
+}

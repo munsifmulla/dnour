@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var path = require("path");
 
 require('dotenv').config();
 //Validating Routes
@@ -24,7 +25,7 @@ router.get('/dashboard', validateRoute(), async (req, res) => {
             link: process.env.APP_PATH + 'dashboard'
         }]
         // listData: data.data,
-        // count: data.total
+        // count: data.tota
     });
 });
 
@@ -33,7 +34,25 @@ router.get('/dashboard/collections', validateRoute(), async (req, res) => {
     console.log("Token ===> ", req.session.token);
     console.log("Logged in ===> ", req.isAuthenticated());
 
-    res.render("collections", {
+    res.render("pages/collections/collectionList", {
+        projectName: process.env.PROJECT_NAME,
+        showMenu: false,
+        breadCrumbs: [{
+            name: 'Dashboard',
+            link: process.env.APP_PATH + 'dashboard'
+        }, {
+            name: 'Collections',
+            link: process.env.APP_PATH + ''
+        }]
+    });
+});
+
+router.get('/dashboard/collection/new', validateRoute(), async (req, res) => {
+    console.log("User ===> ", req.user);
+    console.log("Token ===> ", req.session.token);
+    console.log("Logged in ===> ", req.isAuthenticated());
+
+    res.render("pages/collections/collectionNew", {
         projectName: process.env.PROJECT_NAME,
         showMenu: false,
         breadCrumbs: [{
@@ -42,6 +61,9 @@ router.get('/dashboard/collections', validateRoute(), async (req, res) => {
         }, {
             name: 'Collections',
             link: process.env.APP_PATH + 'dashboard/collections'
+        }, {
+            name: 'New Collection',
+            link: process.env.APP_PATH + ''
         }]
     });
 });

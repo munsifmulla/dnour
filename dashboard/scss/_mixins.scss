@@ -1,0 +1,61 @@
+@mixin Grids{
+  //Grids
+  &.div-2{
+    width: 49%;
+    margin-right: 2%;
+    &:last-of-type{
+      margin-right: 0;
+    }
+  }
+
+  &.div-3{
+    width: 32%;
+    margin-right: 2%;
+    &:last-of-type{
+      margin-right: 0;
+    }
+  }
+
+  &.div-4{
+    width: 23.5%;
+    margin-right: 2%;
+    &:last-of-type{
+      margin-right: 0;
+    }
+  }
+
+  &.auto-width{
+    width: fit-content;
+    margin-right: 25px;
+    padding: 0 30px;
+    &:last-of-type{
+      margin-right: 0;
+    }
+  }
+  //Grids
+}
+
+@mixin flex{
+  &.flex{
+    display: flex;
+
+    &.row{
+      flex-direction: row;
+    }
+
+    &.column{
+      flex-direction: column;
+    }
+    &.right{
+      justify-content: flex-end;
+    }
+
+    &.left{
+      justify-content: flex-start;
+    }
+
+    &.center{
+      justify-content: center;
+    }
+  }
+}

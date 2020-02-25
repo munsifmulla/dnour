@@ -1,0 +1,52 @@
+//- span #{filePath}
+extends ../../layouts/generic
+include ../../partials/breadCrumbs.pug
+include ../../partials/addNew.pug
+
+block title
+	title #{projectName } | Dashboard
+block append styles
+	link(rel="stylesheet", href=env.APP_PATH+"forms.css")
+append content
+append mainPage
+	section.page.dashboard
+		+breadCrumbs(breadCrumbs)
+		h2 New Collection
+		section.form-holder.div-2
+			form.form.new-collection
+				p
+					input(type="text", placeholder="Collection Name" name="name")
+				p
+					textarea(name="description")
+				p.flex.right
+					input(type="submit" name="collectionCreate" value="Create" class="create-new auto-width")
+					input(type="button" name="collectionCancel" value="Cancel" class="cancel-new auto-width")
+	
+block append scripts
+	script. 
+		document.addEventListener('DOMContentLoaded', () => {
+			var form = document.querySelector('.new-collection');
+			var submitButton = form.querySelector('.create-new');
+			form.addEventListener('submit', (e) => {
+				e.preventDefault();
+				submitButton.disabled = true;
+				submitButton.value = "Creaiting Collection...";
+				console.log(fn.serializeForm(form.elements), 'Form');
+				fn.post(urls.collection.create, fn.serializeForm(form.elements), true)
+				.then((data) => {
+					if(data.status === 200){
+						localStorage.setItem("access-token", data.data.token);
+						fn.notification("success", "Collection created successfuly", data.message, 1500);
+						submitButton.value = "Redirecting...";
+						setTimeout(() => {window.location.href = variables.APP_PATH+"dashboard/collections"}, 1500);
+					}else{
+						fn.notification("error", "Error", data.data.message, 1500);
+						submitButton.disabled = false;
+						submitButton.value = "Create";
+					}
+				})
+				.catch((err) => { 
+					fn.notification("error", "Login error", err.data.message, 1500);
+				});
+			})
+		})

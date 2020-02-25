@@ -5,9 +5,9 @@ exports.addCollection = function (req, res) {
 
   collection.create(req.body, (err, data) => {
     if (err) {
-      res.json({ status: 500, message: "Something went wrong", data: err });
+      res.status(200).json({ status: 500, message: "Something went wrong", data: err });
     }
-    res.json({ status: 200, message: "Collection Created", data: data });
+    res.status(200).json({ status: 200, message: "Collection Created", data: data });
   });
 };
 
