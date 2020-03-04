@@ -81,7 +81,7 @@ function getCategoryById(id, res) {
   console.log(id, 'count');
   category.countDocuments({ _id: id }, (err, count) => {
     if (count > 0) {
-      category.findById(id, (err, data) => {
+      category.find(id, (err, data) => {
         if (err) {
           return res.json({ status: 500, message: "Something went wrong", data: err });
         } else {

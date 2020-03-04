@@ -21,8 +21,8 @@ var Cart = new Schema({
     required: 'Kindly select the color'
   },
   user_id: {
-    type: String,
-    required: 'Kindly upload the thumb image of the category'
+    type: ObjectId,
+    required: 'User id is required.'
   },
 });
 

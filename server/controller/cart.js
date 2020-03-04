@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
 var cart = require('../models/cart');
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 exports.addToCart = function (req, res) {
-  cart.find({ product: req.body.product }, (err, data) => {
+  cart.find({ product: req.body.product, user_id: req.body.user_id }, (err, data) => {
     console.log(data, 'Data')
     if (data.length > 0) {
       //Update Quantity
@@ -25,12 +26,12 @@ exports.addToCart = function (req, res) {
 };
 
 exports.deleteFromCart = function (req, res) {
-  cart.countDocuments({ product: req.body.product }, (err, count) => {
+  cart.countDocuments({ product: req.body.product, user_id: req.body.user_id }, (err, count) => {
     console.log(count, 'count');
     if (count === 0) {
       res.status(404).json({ status: 404, message: 'This product is not in your cart.' })
     } else {
-      cart.deleteOne({ product: req.body.product }, (err, data) => {
+      cart.remove({ product: req.body.product, user_id: req.body.user_id }, (err, data) => {
         if (err) {
           res.json({ status: 500, message: "Something went wrong", data: err });
         } else {
@@ -41,20 +42,27 @@ exports.deleteFromCart = function (req, res) {
   })
 };
 
-exports.getAllCartItems = function (req, res) {
-  cart.find({}, (err, data) => {
-    if (err) {
-      res.json({ status: 500, message: "Something went wrong", data: err });
+function getCart(id, res) {
+  cart.countDocuments({ user_id: id }, (err, count) => {
+    if (count > 0) {
+      cart.find({ user_id: id }, (err, data) => {
+        if (err) {
+          res.json({ status: 500, message: "Something went wrong", data: err });
+        } else {
+          if (data.length > 0) {
+            res.json({ status: 200, message: "Cart items found", data: data });
+          }
+          else {
+            res.json({ status: 304, message: "Cart is empty", data: data });
+          }
+        }
+      })
+        .populate('product');
     } else {
-      if (data.length > 0) {
-        res.json({ status: 200, message: "Cart items found", data: data });
-      }
-      else {
-        res.json({ status: 304, message: "Cart is empty", data: data });
-      }
+      return res.json({ status: 404, message: "No Product found in cart", data: err });
     }
   })
-    .populate('product');
-}
+};
 
-exports.getCategoryById = (req, res) => getCategoryById(req.params.id, res);
+
+exports.getCart = (req, res) => getCart(req.params.id, res);

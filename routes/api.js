@@ -78,6 +78,6 @@ router.delete('/user-wishlist/delete', wishlist.deleteProduct);
 // cart
 router.post('/cart/update', cart.addToCart);
 router.delete('/cart/delete', cart.deleteFromCart);
-router.get('/cart/get-cart/:id', cart.getAllCartItems);
+router.get('/cart/:id', cart.getCart);
 
 module.exports = router;
