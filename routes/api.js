@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var multer = require('multer');
 var collection = require('../server/controller/collections');
 var category = require('../server/controller/categories');
 var size = require('../server/controller/sizes');
@@ -11,13 +12,26 @@ var user = require('../server/controller/user');
 var wishlist = require('../server/controller/wishlist');
 var cart = require('../server/controller/cart');
 
+var storage = function () {
+  return multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './dashboard/images/app/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + '-' + file.originalname)
+    }
+  })
+}
+
+var upload = multer({ storage: storage(), limit: 1024 * 1024 * 50 })
+
 // Admin Users
 router.post('/generate-user', user.generateUser);
 router.post('/delete-user', user.deleteUser);
 router.get('/list-users', user.listUsers);
 
 // Collections
-router.post('/collection/add', collection.addCollection);
+router.post('/collection/add', upload.single('image'), collection.addCollection);
 router.post('/collection/edit', collection.editCollection);
 router.delete('/collection/delete', collection.deleteCollection);
 router.get('/collection/all', collection.getAllCollections);

@@ -38,8 +38,8 @@ mongoose.connect('mongodb://localhost/dnour', { useUnifiedTopology: true, useNew
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // Body parsers
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ json: { limit: 1024 * 1024 * 50 } }));
+app.use(bodyParser.urlencoded({ extended: true, limit: 1024 * 1024 * 50, type: 'application/x-www-form-urlencoding', parameterLimit: 50000 }));
 
 //Session Store
 var sessionStore = new MongoDBStore({
@@ -81,7 +81,9 @@ function validateUser(req, res, next) {
 		if (err) {
 			res.json({ status: "error", message: err.message, data: null });
 		} else {
+			console.log(decoded, "<-- Decoded values");
 			req.body.userId = decoded.id;
+			req.body.role = decoded.role;
 			next();
 		}
 	});
@@ -117,6 +119,7 @@ app.use(function (err, req, res, next) {
 	else {
 		console.log(err, "Err");
 		res.status(500).json("Something looks wrong :( !!!");
+		next();
 	}
 });
 

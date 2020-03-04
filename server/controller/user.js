@@ -43,8 +43,9 @@ exports.loginUser = (req, res, next) => {
       next(err);
     } else {
       if (data && data.password && bcrypt.compareSync(req.body.password, data.password)) {
-        const token = jwt.sign({ id: data._id }, req.app.get('secretKey'), { expiresIn: parseInt(process.env.AUTH_EXPIRY_TIME) });
+        const token = jwt.sign({ id: data._id, role: data.role }, req.app.get('secretKey'), { expiresIn: parseInt(process.env.AUTH_EXPIRY_TIME) });
         req.session.token = token;
+        req.session.role = data.role;
         req.login(data._id, () => {
           res.status(200).json({ status: 200, message: "user found!!!", data: { user: data.name, token: token } });
         });

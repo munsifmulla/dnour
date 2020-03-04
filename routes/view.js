@@ -14,12 +14,14 @@ function validateRoute() {
 // View Routes
 router.get('/dashboard', validateRoute(), async (req, res) => {
     console.log("User ===> ", req.user);
+    console.log("Role ===> ", req.session.role);
     console.log("Token ===> ", req.session.token);
     console.log("Logged in ===> ", req.isAuthenticated());
 
     res.render("dashboard", {
         projectName: process.env.PROJECT_NAME,
         showMenu: false,
+        isAdmin: req.session.role,
         breadCrumbs: [{
             name: 'Dashboard',
             link: process.env.APP_PATH + 'dashboard'
@@ -81,6 +83,7 @@ router.get('/logout', (req, res) => {
         showMenu: false
     });
 })
+
 router.get('/register', (req, res) => {
     res.render("register", {
         showMenu: false
