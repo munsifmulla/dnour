@@ -12,18 +12,42 @@ var user = require('../server/controller/user');
 var wishlist = require('../server/controller/wishlist');
 var cart = require('../server/controller/cart');
 
-var storage = function () {
-  return multer.diskStorage({
+//Helper Function for uploading images
+//Takes in parameter of path, size and mime type
+var imageUpload = function (uploadFolder, field) {
+  var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './dashboard/images/app/')
+      cb(null, `./dashboard/images/app/${ uploadFolder }`)
     },
     filename: function (req, file, cb) {
-      cb(null, Date.now() + '-' + file.originalname)
+      cb(null, file.fieldname + "_" + file.originalname.replace(/ /g, '-'));
     }
-  })
-}
+  });
 
-var upload = multer({ storage: storage(), limit: 1024 * 1024 * 50 })
+  function sayError(error) {
+    console.log(error)
+  }
+
+  var fileFilter = function (req, file, cb) {
+    console.log(file.mimetype, "Mime")
+    var acceptedMimeTypes = ['image/jpeg', 'image/png']; //Allowed Mime types JPG and PNG
+    if (acceptedMimeTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(sayError("Mime not supported"), false);
+    }
+  }
+
+  var upload = multer({
+    storage: storage,
+    limit: {
+      fileSize: 1024 * 1024 * 5, //Max 5 MB of file size
+    },
+    fileFilter: fileFilter,
+  }
+  );
+  return upload.fields(field, 20);
+}
 
 // Admin Users
 router.post('/generate-user', user.generateUser);
@@ -31,12 +55,14 @@ router.post('/delete-user', user.deleteUser);
 router.get('/list-users', user.listUsers);
 
 // Collections
-router.post('/collection/add', upload.single('image'), collection.addCollection);
-router.post('/collection/edit', collection.editCollection);
+router.post('/collection/add', imageUpload('collection', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }]), collection.addCollection);
+router.post('/collection/edit', imageUpload('collection', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }]), collection.editCollection);
 router.delete('/collection/delete', collection.deleteCollection);
 router.get('/collection/all', collection.getAllCollections);
 router.get('/collection/:id', collection.getCollectionById);
 router.post('/collection/search', collection.searchCollections);
+
+router.post('/collection-image/update', imageUpload('collection', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }]), collection.updateCollectionImages);
 
 // Category
 router.post('/category/add', category.addCategory);

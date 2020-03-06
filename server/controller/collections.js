@@ -1,23 +1,66 @@
 var mongoose = require('mongoose');
 var collection = require('../models/collections');
+var collectionImages = require('../models/collectionImges');
 
 exports.addCollection = function (req, res) {
+  const body = {
+    name: req.body.name,
+    description: req.body.description,
+    slug: req.body.name.replace(/ /g, '_').toLowerCase()
+  };
 
-  collection.create(req.body, (err, data) => {
+  collection.create(body, (err, data) => {
+    const s_stack = [];
+    console.log("Created!!")
     if (err) {
       res.status(200).json({ status: 500, message: "Something went wrong", data: err });
+    } else {
+      // Large / banner Images
+      req.files.banner_image.map(image => {
+        let imageBody = {
+          collection_id: data._id,
+          image_url: image.path.replace("dashboard/images/", process.env.PROJECT_PATH)
+        }
+        collectionImages.create(imageBody, (err, imageData) => {
+          s_stack.push(err ? 'error' : 'success');
+        });
+      });
+
+      // Thumb Images
+      req.files.thumb_image.map(image => {
+        let imageBody = {
+          collection_id: data._id,
+          image_url: image.path.replace("dashboard/images/", process.env.PROJECT_PATH)
+        }
+        collectionImages.create(imageBody, (err, imageData) => {
+          s_stack.push(err ? 'error' : 'success');
+        });
+      })
+
     }
-    res.status(200).json({ status: 200, message: "Collection Created", data: data });
+    if (s_stack.includes('error')) {
+      res.status(200).json({ status: 500, message: "Something went wrong while uploading images, please try again", data: err });
+    } else {
+      res.status(200).json({ status: 200, message: "Collection Created", data: data });
+    }
+
   });
 };
 
 exports.editCollection = function (req, res) {
-  collection.countDocuments(req.id, (err, count) => {
+  console.log(req.body, 'Request');
+  collection.countDocuments(req.body.id, (err, count) => {
     console.log(count, 'count');
     if (count === 0) {
       res.status(404).json({ status: 404, message: 'Collection not found' })
     } else {
-      collection.findOneAndUpdate({ _id: req.body.id }, { $set: req.body }, { new: true }, (err, data) => {
+      let body = {
+        name: req.body.name,
+        description: req.body.description,
+        slug: req.body.name.replace(/ /g, '_').toLowerCase()
+      };
+
+      collection.findOneAndUpdate({ _id: req.body.id }, { $set: body }, { new: true }, (err, data) => {
         if (err) {
           res.json({ status: 500, message: "Something went wrong", data: err });
         } else {
@@ -27,6 +70,32 @@ exports.editCollection = function (req, res) {
     }
   })
 };
+
+exports.updateCollectionImages = function (req, res) {
+  collectionImages.countDocuments({ _id: req.body.id }, (err, count) => {
+    if (count === 0) {
+      res.status(404).json({ status: 404, message: 'Collection Image not found' })
+    } else {
+
+      collectionImages.findOneAndUpdate({ _id: req.body.id, collection_id: req.body.collection_id },
+        {
+          $set:
+          {
+            image_url: req.body.type === 'banner' ?
+              req.files.banner_image[0].path.replace("dashboard/images/", process.env.PROJECT_PATH)
+              : req.files.thumb_image[0].path.replace("dashboard/images/", process.env.PROJECT_PATH)
+          }
+        },
+        { new: true }, (err, data) => {
+          if (err) {
+            res.json({ status: 500, message: "Something went wrong", data: err });
+          } else {
+            res.json({ status: 200, message: "Collection Image Updated", data: data });
+          }
+        });
+    }
+  });
+}
 
 exports.deleteCollection = function (req, res) {
   collection.countDocuments({ _id: req.body.id }, (err, count) => {

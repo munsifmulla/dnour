@@ -81,7 +81,6 @@ function validateUser(req, res, next) {
 		if (err) {
 			res.json({ status: "error", message: err.message, data: null });
 		} else {
-			console.log(decoded, "<-- Decoded values");
 			req.body.userId = decoded.id;
 			req.body.role = decoded.role;
 			next();

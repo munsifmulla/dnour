@@ -14,14 +14,16 @@ var Collections = new Schema({
     type: String,
     required: 'Kindly enter the description of the collection'
   },
-  banner_image: {
-    type: String,
-    required: 'Kindly upload the banner image of the collection'
-  },
-  thumb_image: {
-    type: String,
-    required: 'Kindly upload the thumb image of the collection'
-  },
+  // banner_image: {
+  //   type: String,
+  //   required: 'Kindly upload the banner image of the collection',
+  //   default: 'sample_image'
+  // },
+  // thumb_image: {
+  //   type: String,
+  //   required: 'Kindly upload the thumb image of the collection',
+  //   default: 'sample_image'
+  // },
 });
 
 module.exports = mongoose.model('collections', Collections);
