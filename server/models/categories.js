@@ -15,14 +15,6 @@ var Categories = new Schema({
     type: ObjectId,
     required: "Collection Id is required"
   },
-  banner_image: {
-    type: String,
-    required: 'Kindly upload the banner image of the category'
-  },
-  thumb_image: {
-    type: String,
-    required: 'Kindly upload the thumb image of the category'
-  },
 });
 
 module.exports = mongoose.model('categories', Categories);
