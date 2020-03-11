@@ -56,7 +56,7 @@ router.get('/list-users', user.listUsers);
 
 // Collections
 router.post('/collection/add', imageUpload('collection', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }]), collection.addCollection);
-router.post('/collection/edit', imageUpload('collection', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }]), collection.editCollection);
+router.post('/collection/edit', collection.editCollection);
 router.delete('/collection/delete', collection.deleteCollection);
 router.get('/collection/all', collection.getAllCollections);
 router.get('/collection/:id', collection.getCollectionById);
@@ -74,8 +74,8 @@ router.get('/category/all', category.getAllCategories);
 router.get('/category/:id', category.getCategoryById);
 router.post('/category/search', category.searchCategory);
 
-router.post('/category-image/update', imageUpload('category', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }]), category.updateCategoryImages);
 router.post('/category-image/add', imageUpload('category', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }]), category.addCategoryImages);
+router.post('/category-image/update', imageUpload('category', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }]), category.updateCategoryImages);
 router.post('/category-image/delete', category.deleteCategoryImages);
 
 // Product

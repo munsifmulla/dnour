@@ -4,19 +4,51 @@ var productDescription = require('../models/productDesc');
 var productImages = require('../models/productImages');
 
 exports.addProduct = function (req, res) {
-  product.find({ name: req.body.type }, (err, data) => {
+  product.find({ name: req.body.name }, (err, data) => {
     if (data.length > 0) {
-      res.status(422).json({ status: 422, message: 'Product type exists' })
+      res.status(422).json({ status: 422, message: 'Product already exists' })
     } else {
-      product.create(req.body, (err, data) => {
+
+      let product_body = {
+        ...req.body,
+        ...{ slug: req.body.name.replace(/ /g, '_').toLowerCase() }
+      };
+
+      product.create(product_body, (err, data) => {
         if (err) {
           res.json({ status: 500, message: "Something went wrong", data: err });
+        } else {
+          //Add description
+          let status = addProductDescription(data._id, req.body);
+          console.log(status, "Status");
+
+          if (status === 'error') {
+            res.json({ status: 500, message: "Something went wrong in adding desc", data: err });
+          } else {
+            res.json({ status: 200, message: "New product added" });
+          }
         }
-        res.json({ status: 200, message: "New Product created", data: data });
       });
     }
   });
 };
+
+function addProductDescription(product_id, body) {
+  let disp_stack = [];
+  var descBody = {
+    product_id: product_id,
+    description: body.description,
+    karat_gold: body.gold_material,
+    weight_gold: body.gold_weight,
+    weight_stones: body.stone_weight,
+    color_gold: body.gold_color
+  };
+  productDescription.create(descBody, (err, data) => {
+    disp_stack.push(err ? 'error' : 'success');
+  });
+
+  return disp_stack;
+}
 
 exports.editProduct = function (req, res) {
   product.countDocuments(req.id, (err, count) => {
@@ -44,13 +76,13 @@ exports.deleteProduct = function (req, res) {
       res.status(404).json({ status: 404, message: 'Product not found' })
     } else {
       return Promise.all([
-        productDescription.deleteOne({ product_id: pr_id })
+        productDescription.remove({ product_id: pr_id })
           .exec(),
-        productImages.deleteOne({ product_id: pr_id })
+        productImages.remove({ product_id: pr_id })
           .exec(),
       ])
         .then(function () {
-          product.deleteOne({ _id: pr_id }, (err, data) => {
+          product.remove({ _id: pr_id }, (err, data) => {
             if (err) {
               res.json({ status: 500, message: "Something went wrong", data: err });
             } else {
@@ -75,52 +107,50 @@ exports.searchProducts = function (req, res) {
 };
 
 exports.getAllProducts = function (req, res) {
-  product.find()
-    .populate('category size')
-    .exec((err, data) => {
-      if (err) {
-        res.json({ status: 500, message: "Something went wrong", data: err });
-      } else {
-        if (data.length > 0) {
-          res.json({ status: 200, message: "Product found", data: data });
-        }
-        else {
-          res.json({ status: 304, message: "No Product found", data: data });
-        }
+
+  product.aggregate([
+    {
+      "$lookup": {
+        "from": "product_descriptions", //collection name
+        "localField": "_id", // uid is exists in both collection
+        "foreignField": "product_id",
+        "as": "description"
       }
-    })
+    }
+  ]).exec().then(function (data) {
+    if (data.length > 0) {
+      res.json({ status: 200, message: "Products found", data: data });
+    }
+    else {
+      res.json({ status: 304, message: "No Products found", data: data });
+    }
+  }).catch(function (err) {
+    res.json({ status: 500, message: "Something went wrong", data: err });
+  });
 }
 
 function getProductById(id, res) {
-  product.countDocuments({ _id: id }, (err, count) => {
-    var pr_id;
-    if (count > 0) {
-      product.findById(id, (err, data) => {
-        if (err) {
-          return res.json({ status: 500, message: "Something went wrong", data: err });
-        } else {
-          // console.log('product data', data);
-          pr_id = data._id;
-          return Promise.all([
-            data,
-            productDescription.find({ product_id: pr_id })
-              .exec(),
-            productImages.find({ product_id: pr_id })
-              .exec(),
-          ])
-            .then(function (pr_data) {
-              var product = {};
-              product.details = pr_data[0];
-              product.description = pr_data[1][0];
-              product.images = pr_data[2];
-              return res.json({ status: 200, message: "Product found", data: product });
-            });
-        }
-      })
-        .populate('collection category size');
-    } else {
-      return res.json({ status: 404, message: "No Product found", data: err });
+  product.aggregate([
+    {
+      "$match": { _id: mongoose.Types.ObjectId(id) }
+    },
+    {
+      "$lookup": {
+        "from": "product_descriptions", //collection name
+        "localField": "_id", // uid is exists in both collection
+        "foreignField": "product_id",
+        "as": "description"
+      }
     }
+  ]).exec().then(function (data) {
+    if (data.length > 0) {
+      res.json({ status: 200, message: "Product found", data: data });
+    }
+    else {
+      res.json({ status: 304, message: "No Product found", data: data });
+    }
+  }).catch(function (err) {
+    res.json({ status: 500, message: "Something went wrong", data: err });
   });
 }
 

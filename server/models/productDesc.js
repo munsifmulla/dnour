@@ -16,11 +16,11 @@ var ProductDescription = new Schema({
     required: 'Kindly enter the karat of the gold',
   },
   weight_gold: {
-    type: Number,
+    type: String,
     required: 'Add gold weight',
   },
   weight_stones: {
-    type: Number,
+    type: String,
     required: 'Add stone weight',
   },
   color_gold: {

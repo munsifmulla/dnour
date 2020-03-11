@@ -1,13 +1,11 @@
 var mongoose = require('mongoose');
 var collection = require('../models/collections');
 var collectionImages = require('../models/collectionImges');
-var ObjectId = mongoose.Schema.Types.ObjectId;
 
 exports.addCollection = function (req, res) {
   const body = {
-    name: req.body.name,
-    description: req.body.description,
-    slug: req.body.name.replace(/ /g, '_').toLowerCase()
+    ...req.body,
+    ...{ slug: req.body.name.replace(/ /g, '_').toLowerCase() }
   };
 
   collection.find({ name: body.name }, (err, data) => {
