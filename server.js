@@ -99,9 +99,13 @@ app.use(function (req, res, next) {
 var api = require('./routes/api');
 app.use('/api', validateUser, api);
 
-//PUBLIC API Routes Pre Auth
-var user = require('./routes/user');
-app.use('/api-user', user);
+//PUBLIC API Routes Pre Auth Admin
+var admin = require('./routes/admin');
+app.use('/api-admin', admin);
+
+//API for user / Client
+var clientApi = require('./routes/clientApi');
+app.use('/client', clientApi);
 
 //View Routes
 var views = require('./routes/view');
@@ -111,6 +115,7 @@ app.use('/', views);
 app.use(function (req, res, next) {
 	res.render("404");
 });
+
 // handle errors
 app.use(function (err, req, res, next) {
 	if (err.status === 404)

@@ -2,6 +2,9 @@ var mongoose = require('mongoose');
 var product = require('../models/product');
 var productDescription = require('../models/productDesc');
 var productImages = require('../models/productImages');
+var productCADFile = require('../models/productCADFile');
+var category = require('../models/categories');
+var collection = require('../models/collections');
 
 exports.addProduct = function (req, res) {
   product.find({ name: req.body.name }, (err, data) => {
@@ -11,7 +14,7 @@ exports.addProduct = function (req, res) {
 
       let product_body = {
         ...req.body,
-        ...{ slug: req.body.name.replace(/ /g, '_').toLowerCase() }
+        ...{ slug: req.body.name.replace(/ /g, '-').toLowerCase() }
       };
 
       product.create(product_body, (err, data) => {
@@ -19,11 +22,14 @@ exports.addProduct = function (req, res) {
           res.json({ status: 500, message: "Something went wrong", data: err });
         } else {
           //Add description
-          let status = addProductDescription(data._id, req.body);
-          console.log(status, "Status");
+          let descStatus = addProductDescription(data._id, req.body);
+          let productImageStatus = addProductImages(req, res, data._id, 'save');
+          let CADImageStatus = addCADFiles(req, res, data._id, 'save');
 
-          if (status === 'error') {
-            res.json({ status: 500, message: "Something went wrong in adding desc", data: err });
+          let statusStack = [...descStatus, ...productImageStatus, ...CADImageStatus];
+
+          if (statusStack.includes('error')) {
+            res.json({ status: 500, message: "Something went wrong in adding a product", data: err });
           } else {
             res.json({ status: 200, message: "New product added" });
           }
@@ -50,6 +56,68 @@ function addProductDescription(product_id, body) {
   return disp_stack;
 }
 
+function addProductImages(req, res, productId, type) {
+  let s_stack = [];
+  req.files.banner_image.map(image => {
+    let imageBody = {
+      product_id: productId,
+      url: image.path.replace("dashboard/images/", process.env.PROJECT_PATH),
+      type: 'banner'
+    }
+    productImages.create(imageBody, (err, imageData) => {
+      s_stack.push(err ? 'error' : 'success');
+    });
+  });
+
+  // Thumb Images
+  req.files.thumb_image.map(image => {
+    let imageBody = {
+      product_id: productId,
+      url: image.path.replace("dashboard/images/", process.env.PROJECT_PATH),
+      type: 'thumb'
+    }
+    productImages.create(imageBody, (err, imageData) => {
+      s_stack.push(err ? 'error' : 'success');
+    });
+  });
+
+  if (type === 'save')
+    return s_stack;
+
+  if (s_stack.includes('error')) {
+    res.status(200).json({ status: 500, message: "Something went wrong while uploading images, please try again", data: err });
+  } else {
+    res.status(200).json({ status: 200, message: "Image added", data: data });
+  }
+}
+
+//Add new Image
+exports.addProductImages = (req, res) => addProductImages(req, res, req.body.product_id, 'new');
+
+function addCADFiles(req, res, productId, type) {
+  let s_stack = [];
+  req.files.cad_image.map(image => {
+    let imageBody = {
+      product_id: productId,
+      cad_file: image.path.replace("dashboard/images/", process.env.PROJECT_PATH)
+    }
+    productCADFile.create(imageBody, (err, imageData) => {
+      s_stack.push(err ? 'error' : 'success');
+    });
+  });
+  if (type === 'save')
+    return s_stack;
+
+  if (s_stack.includes('error')) {
+    res.status(200).json({ status: 500, message: "Something went wrong while uploading images, please try again", data: err });
+  } else {
+    res.status(200).json({ status: 200, message: "Image added", data: data });
+  }
+}
+
+//Add new Cad File
+exports.addCADFiles = (req, res) => addCADFiles(req, res, req.body.product_id, 'new');
+
 exports.editProduct = function (req, res) {
   product.countDocuments(req.id, (err, count) => {
     console.log(count, 'count');
@@ -62,8 +130,7 @@ exports.editProduct = function (req, res) {
         } else {
           res.json({ status: 200, message: "Product Updated", data: data });
         }
-      })
-        .populate('category size collection');
+      });
     }
   })
 };
@@ -129,10 +196,11 @@ exports.getAllProducts = function (req, res) {
   });
 }
 
-function getProductById(id, res) {
+function getProductBySlug(slug, res) {
   product.aggregate([
     {
-      "$match": { _id: mongoose.Types.ObjectId(id) }
+      "$match": { slug: slug }
+      // "$match": { category: mongoose.Types.ObjectId(slug) }
     },
     {
       "$lookup": {
@@ -140,6 +208,22 @@ function getProductById(id, res) {
         "localField": "_id", // uid is exists in both collection
         "foreignField": "product_id",
         "as": "description"
+      }
+    },
+    {
+      "$lookup": {
+        "from": "product_images", //collection name
+        "localField": "_id", // uid is exists in both collection
+        "foreignField": "product_id",
+        "as": "images"
+      }
+    },
+    {
+      "$lookup": {
+        "from": "product_cad_files", //collection name
+        "localField": "_id", // uid is exists in both collection
+        "foreignField": "product_id",
+        "as": "cad_images"
       }
     }
   ]).exec().then(function (data) {
@@ -154,4 +238,108 @@ function getProductById(id, res) {
   });
 }
 
-exports.getProductById = (req, res) => getProductById(req.params.id, res);
+exports.getProductByCategory = function (req, res) {
+  category.aggregate([
+    {
+      "$match": { slug: req.params.slug }
+    },
+  ])
+    .exec()
+    .then((category) => {
+      product.aggregate([
+        {
+          "$match": { category: mongoose.Types.ObjectId(category[0]._id) }
+        },
+        {
+          "$lookup": {
+            "from": "product_descriptions", //collection name
+            "localField": "_id", // uid is exists in both collection
+            "foreignField": "product_id",
+            "as": "description"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "product_images", //collection name
+            "localField": "_id", // uid is exists in both collection
+            "foreignField": "product_id",
+            "as": "images"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "product_cad_files", //collection name
+            "localField": "_id", // uid is exists in both collection
+            "foreignField": "product_id",
+            "as": "cad_images"
+          }
+        }
+      ]).exec().then(function (data) {
+        console.log(data, "Data");
+        if (data.length > 0) {
+          res.json({ status: 200, message: "Product found", data: data });
+        }
+        else {
+          res.json({ status: 304, message: "No Product found", data: data });
+        }
+      }).catch(function (err) {
+        res.json({ status: 500, message: "Something went wrong", data: err });
+      });
+    })
+    .catch((err) => console.log(err, "Error"));
+}
+
+exports.getProductByCollection = function (req, res) {
+  collection.aggregate([
+    {
+      "$match": { slug: req.params.slug }
+    },
+  ])
+    .exec()
+    .then((collection) => {
+      product.aggregate([
+        {
+          "$match": { collection_id: mongoose.Types.ObjectId(collection[0]._id) }
+        },
+        {
+          "$lookup": {
+            "from": "product_descriptions", //collection name
+            "localField": "_id", // uid is exists in both collection
+            "foreignField": "product_id",
+            "as": "description"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "product_images", //collection name
+            "localField": "_id", // uid is exists in both collection
+            "foreignField": "product_id",
+            "as": "images"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "product_cad_files", //collection name
+            "localField": "_id", // uid is exists in both collection
+            "foreignField": "product_id",
+            "as": "cad_images"
+          }
+        }
+      ])
+        .exec()
+        .then(function (data) {
+          console.log(data, "Data");
+          if (data.length > 0) {
+            res.json({ status: 200, message: "Product found", data: data });
+          }
+          else {
+            res.json({ status: 304, message: "No Product found", data: data });
+          }
+        }).catch(function (err) {
+          res.json({ status: 500, message: "Something went wrong", data: err });
+        });
+    })
+    .catch((err) => console.log(err, "Error"));
+}
+
+exports.getProductBySlug = (req, res) => getProductBySlug(req.params.slug, res);

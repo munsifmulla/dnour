@@ -1,7 +1,6 @@
 var mongoose = require('mongoose'),
   app = require('express')(),
-  User = require('../models/user'),
-  Address = require('../models/userAddress'),
+  Admin = require('../models/admin'),
   bcrypt = require('bcrypt'),
   jwt = require('jsonwebtoken'),
   passport = require('passport'),
@@ -10,16 +9,16 @@ var mongoose = require('mongoose'),
   utils = require('../../lib/helpers/utils');
 
 exports.createUser = (req, res, next) => {
-  User.create({
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
+  Admin.create({
+    name: req.body.name,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, salt)
+    password: bcrypt.hashSync(req.body.password, salt),
+    role: req.body.role
   }, (err, result) => {
     if (err) {
       next(err);
     } else {
-      User.findOne({ email: req.body.email }, (err, data) => {
+      Admin.findOne({ email: req.body.email }, (err, data) => {
         if (err) {
           next(err);
         } else {
@@ -40,7 +39,7 @@ exports.createUser = (req, res, next) => {
 
 exports.loginUser = (req, res, next) => {
   console.log(parseInt(process.env.AUTH_EXPIRY_TIME), 'Time');
-  User.findOne({ email: req.body.email }, (err, data) => {
+  Admin.findOne({ email: req.body.email }, (err, data) => {
     if (err) {
       next(err);
     } else {
@@ -67,11 +66,11 @@ exports.generateUser = (req, res, next) => {
     password: bcrypt.hashSync(randPass, salt),
     role,
   };
-  User.count({ email }, function (err, count) {
+  Admin.count({ email }, function (err, count) {
     if (count > 0) {
       res.send({ status: 401, message: "User exists", data: {} })
     } else {
-      User.create(user, (error, result) => {
+      Admin.create(user, (error, result) => {
         if (error) {
           console.log(error, 'Error in create');
           next(error);
@@ -121,7 +120,7 @@ function sendEmail(data) {
 exports.deleteUser = (req, res, next) => {
   const { email } = req.body;
 
-  User.count({ email }, function (err, count) {
+  Admin.count({ email }, function (err, count) {
     if (count > 0) {
       User.remove({ email }, function (err, result) {
         if (err) {
@@ -137,7 +136,7 @@ exports.deleteUser = (req, res, next) => {
 }
 
 exports.listUsers = (req, res, next) => {
-  User.find({}, (err, data) => {
+  Admin.find({}, (err, data) => {
     if (err) {
       res.json({ status: 500, message: "Something went wrong", data: err });
     } else {
@@ -158,58 +157,3 @@ passport.serializeUser((id, done) => {
 passport.deserializeUser((id, done) => {
   done(null, id);
 })
-
-//User Section Ends
-
-//Address
-exports.addNewAddress = (req, res) => {
-  const addBody = {
-    user_id: req.body.user_id,
-    addr_1: req.body.line_1,
-    addr_2: req.body.line_2,
-    addr_3: req.body.line_3,
-    city: req.body.city,
-    state: req.body.state,
-    country: req.body.country,
-    zip: req.body.zip,
-    latlng: req.body.latlng
-  }
-  Address.create(addBody)
-    .then((response) => {
-      res.json({ status: 200, message: "User address added successfully", data: response });
-    })
-    .catch((error) => {
-      res.json({ status: 500, message: "Error occured", data: error });
-    })
-}
-
-exports.editAddress = (req, res) => {
-  const addBody = {
-    user_id: req.body.user_id,
-    addr_1: req.body.line_1,
-    addr_2: req.body.line_2,
-    addr_3: req.body.line_3,
-    city: req.body.city,
-    state: req.body.state,
-    country: req.body.country,
-    zip: req.body.zip,
-    latlng: req.body.latlng
-  }
-  Address.findOneAndUpdate({ _id: req.body.addr_id }, { $set: addBody }, { new: true })
-    .then((response) => {
-      res.json({ status: 200, message: "User address updated successfully", data: response });
-    })
-    .catch((error) => {
-      res.json({ status: 500, message: "Error occured", data: error });
-    })
-}
-
-exports.deleteAddress = (req, res) => {
-  Address.remove({ _id: req.body.addr_id })
-    .then((response) => {
-      res.json({ status: 200, message: "User address deleted successfully", data: response });
-    })
-    .catch((error) => {
-      res.json({ status: 500, message: "Error in deleting addr", data: response });
-    })
-}

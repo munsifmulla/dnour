@@ -2,13 +2,8 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
-  first_name: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  last_name: {
+const Admin = new Schema({
+  name: {
     type: String,
     required: true,
     trim: true
@@ -23,7 +18,12 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     trim: true
+  },
+  role: {
+    type: String,
+    required: true,
+    trim: true
   }
 });
 
-module.exports = mongoose.model('user', UserSchema);
+module.exports = mongoose.model('admin', Admin);

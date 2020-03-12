@@ -14,7 +14,7 @@ var ProductImages = new Schema({
       validator: function (v) {
         return /([/|.|\w|\s|-])*\.(?:jpg|jpeg|png)/.test(v);
       },
-      message: props => `${props.value} is not a valid image file!`
+      message: props => `${ props.value } is not a valid image file!`
     },
   },
   product_id: {

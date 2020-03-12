@@ -21,4 +21,4 @@ function setPrice(num) {
   return num * 100;
 }
 
-module.exports = mongoose.model('product_cad_file', ProductCADFile);
+module.exports = mongoose.model('product_cad_files', ProductCADFile);

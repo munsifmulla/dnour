@@ -18,17 +18,36 @@ exports.addProductImage = function (req, res) {
 };
 
 exports.editProductImage = function (req, res) {
-  productImages.countDocuments(req.body.product_id, (err, count) => {
+  productImages.countDocuments(req.body.id, (err, count) => {
     if (count === 0) {
       res.status(404).json({ status: 404, message: 'Image not found' });
     } else {
-      productImages.findOneAndUpdate({ product_id: req.body.product_id }, { $set: req.body }, { new: true }, (err, data) => {
-        if (err) {
-          res.json({ status: 500, message: "Something went wrong", data: err });
-        } else {
-          res.json({ status: 200, message: "Product Image Updated", data: data });
+      let s_stack = [];
+      req.files.banner_image && req.files.banner_image.map(image => {
+        let imageBody = {
+          url: image.path.replace("dashboard/images/", process.env.PROJECT_PATH),
         }
-      })
+        productImages.findOneAndUpdate({ _id: req.body.id }, { $set: imageBody }, (err, imageData) => {
+          s_stack.push(err ? 'error' : 'success');
+        });
+      });
+
+      // Thumb Images
+      console.log(req.files.thumb_image.length, "Image length");
+      req.files.thumb_image && req.files.thumb_image.map(image => {
+        let imageBody = {
+          url: image.path.replace("dashboard/images/", process.env.PROJECT_PATH)
+        }
+        productImages.findOneAndUpdate({ _id: req.body.id }, { $set: imageBody }, (err, imageData) => {
+          s_stack.push(err ? 'error' : 'success');
+        });
+      });
+
+      if (s_stack.includes("error")) {
+        res.json({ status: 500, message: "Something went wrong" });
+      } else {
+        res.json({ status: 200, message: "Product Image Updated" });
+      }
     }
   })
 };

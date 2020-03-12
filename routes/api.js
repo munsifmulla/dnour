@@ -8,7 +8,7 @@ var product = require('../server/controller/product');
 var productDescription = require('../server/controller/productDesc');
 var productCADFile = require('../server/controller/productCADFile');
 var productImage = require('../server/controller/productImages');
-var user = require('../server/controller/user');
+var admin = require('../server/controller/admin');
 var wishlist = require('../server/controller/wishlist');
 var cart = require('../server/controller/cart');
 
@@ -50,9 +50,9 @@ var imageUpload = function (uploadFolder, field) {
 }
 
 // Admin Users
-router.post('/generate-user', user.generateUser);
-router.post('/delete-user', user.deleteUser);
-router.get('/list-users', user.listUsers);
+router.post('/generate-admin', admin.generateUser);
+router.post('/delete-admin', admin.deleteUser);
+router.get('/list-admins', admin.listUsers);
 
 // Collections
 router.post('/collection/add', imageUpload('collection', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }]), collection.addCollection);
@@ -79,11 +79,13 @@ router.post('/category-image/update', imageUpload('category', [{ name: 'banner_i
 router.post('/category-image/delete', category.deleteCategoryImages);
 
 // Product
-router.post('/product/add', product.addProduct);
+router.post('/product/add', imageUpload('product', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }, { name: 'cad_image', maxCount: 6 }]), product.addProduct);
 router.post('/product/edit', product.editProduct);
 router.delete('/product/delete', product.deleteProduct);
 router.get('/product/all', product.getAllProducts);
-router.get('/product/:id', product.getProductById);
+router.get('/product/:slug', product.getProductBySlug);
+router.get('/product/category/:slug', product.getProductByCategory);
+router.get('/product/collection/:slug', product.getProductByCollection);
 router.post('/product/search', product.searchProducts);
 
 // Product Desc
@@ -93,16 +95,16 @@ router.delete('/product-description/delete', productDescription.deleteProductDes
 router.get('/product-description/:id', productDescription.getProductDescById);
 
 // Product CAD File
-router.post('/product-cad-file/add', productCADFile.addProductCADFile);
-router.post('/product-cad-file/edit', productCADFile.editProductCADFile);
+router.post('/product-cad-file/add', imageUpload('product', [{ name: 'cad_image', maxCount: 6 }]), product.addCADFiles);
+router.post('/product-cad-file/edit', imageUpload('product', [{ name: 'cad_image', maxCount: 6 }]), productCADFile.editProductCADFile);
 router.delete('/product-cad-file/delete', productCADFile.deleteProductCADFile);
 router.get('/product-cad-file/all', productCADFile.getAllProductCADFiles);
 router.get('/product-cad-file/:id', productCADFile.getProductCADFilesById);
 router.post('/product-cad-file/search', productCADFile.searchProductCADFiles);
 
 // Product Images
-router.post('/product-image/add', productImage.addProductImage);
-router.post('/product-image/edit', productImage.editProductImage);
+router.post('/product-image/add', imageUpload('product', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }]), product.addProductImages);
+router.post('/product-image/edit', imageUpload('product', [{ name: 'banner_image', maxCount: 6 }, { name: 'thumb_image', maxCount: 6 }]), productImage.editProductImage);
 router.delete('/product-image/delete', productImage.deleteProductImage);
 router.get('/product-image/all', productImage.getAllProductImages);
 router.get('/product-image/:id', productImage.getProductImageById);
@@ -117,9 +119,9 @@ router.get('/product-size/:id', size.getSizeById);
 router.post('/product-size/search', size.searchSize);
 
 //wishlist
-router.post('/user-wishlist/add', wishlist.addProduct);
-router.get('/user-wishlist', wishlist.getAllProducts);
-router.delete('/user-wishlist/delete', wishlist.deleteProduct);
+router.post('/wishlist/add', wishlist.addProduct);
+router.get('/wishlist', wishlist.getAllProducts);
+router.delete('/wishlist/delete', wishlist.deleteProduct);
 
 // cart
 router.post('/cart/update', cart.addToCart);

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var collection = require('../models/collections');
+var category = require('../models/categories');
 var collectionImages = require('../models/collectionImges');
 
 exports.addCollection = function (req, res) {
@@ -213,6 +214,39 @@ function getCollectionById(id, res) {
       // data.map(item => console.log(item))
     }).catch(function (err) {
       res.json({ status: 500, message: "Something went wrong", data: err });
+    })
+}
+
+
+function getCollectionByCategory(id, res) {
+  //Fetch the ID basis slug
+  category.find({ _id: id }).exec()
+    .then((cat_data) => {
+      collection.aggregate([
+        {
+          "$match": { _id: mongoose.Types.ObjectId(cat_data._id) }
+        },
+        {
+          "$lookup": {
+            "from": "collection_images", //collection name
+            "localField": "_id", // uid is exists in both collection
+            "foreignField": "collection_id",
+            "as": "images"
+          }
+        }
+      ])
+        .exec().then(function (data) {
+          console.log(data, "data")
+          if (data.length > 0) {
+            res.json({ status: 200, message: "Collections found", data: data });
+          }
+          else {
+            res.json({ status: 304, message: "No Collections found", data: data });
+          }
+          // data.map(item => console.log(item))
+        }).catch(function (err) {
+          res.json({ status: 500, message: "Something went wrong", data: err });
+        })
     })
 }
 

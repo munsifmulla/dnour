@@ -21,13 +21,21 @@ exports.editProductCADFile = function (req, res) {
     if (count === 0) {
       res.status(404).json({ status: 404, message: 'CAD File not found' });
     } else {
-      productCADFile.findOneAndUpdate({ product_id: req.body.product_id }, { $set: { cad_file: req.body.cad_file } }, { new: true }, (err, data) => {
-        if (err) {
-          res.json({ status: 500, message: "Something went wrong", data: err });
-        } else {
-          res.json({ status: 200, message: "Product CAD File Updated", data: data });
+      let s_stack = [];
+      req.files.cad_image && req.files.cad_image.map(image => {
+        let imageBody = {
+          cad_file: image.path.replace("dashboard/images/", process.env.PROJECT_PATH),
         }
-      })
+        productCADFile.findOneAndUpdate({ _id: req.body.id }, { $set: imageBody }, (err, imageData) => {
+          s_stack.push(err ? 'error' : 'success');
+        });
+      });
+
+      if (s_stack.includes("error")) {
+        res.json({ status: 500, message: "Something went wrong" });
+      } else {
+        res.json({ status: 200, message: "CAD Image Updated" });
+      }
     }
   })
 };
