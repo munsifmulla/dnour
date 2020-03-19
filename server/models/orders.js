@@ -3,26 +3,30 @@ var Schema = mongoose.Schema;
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var Orders = new Schema({
-  product: {
+  products: {
+    type: Schema.Types.Mixed,
+    required: 'Please select a product.'
+  },
+  address: {
     type: ObjectId,
-    required: 'Please select a product.',
-    ref: 'product'
+    required: "Address is required",
+    ref: 'user_address'
   },
-  qty: {
-    type: Number,
-    required: 'Kindly select the qty.'
-  },
-  size: {
+  payment_method: {
     type: String,
-    required: "Kindly select a size."
+    required: 'Payment method is required',
   },
-  color: {
-    type: String,
-    required: 'Kindly select the color'
+  order_value: {
+    type: Number
   },
-  user_id: {
-    type: ObjectId,
-    required: 'User id is required.'
+  order_placed_date: {
+    type: String
+  },
+  order_payment_status: {
+    type: String
+  },
+  order_status: {
+    type: String
   },
 });
 

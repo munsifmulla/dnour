@@ -52,11 +52,6 @@ var imageUpload = function (uploadFolder, field) {
 router.post('/register', user.createUser);
 router.post('/login', user.loginUser);
 
-//User Address
-router.post('/address/add', user.addNewAddress);
-router.post('/address/update', user.editAddress);
-router.delete('/address/delete', user.deleteAddress);
-
 // Collections
 router.get('/collection/all', collection.getAllCollections);
 router.get('/collection/:id', collection.getCollectionById);

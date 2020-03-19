@@ -204,6 +204,16 @@ exports.editAddress = (req, res) => {
     })
 }
 
+exports.getAddress = (req, res) => {
+  Address.find({ user_id: req.params.userid })
+    .then((response) => {
+      res.json({ status: 200, message: "User address found", data: response });
+    })
+    .catch((error) => {
+      res.json({ status: 500, message: "Error occured", data: error });
+    })
+}
+
 exports.deleteAddress = (req, res) => {
   Address.remove({ _id: req.body.addr_id })
     .then((response) => {

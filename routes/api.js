@@ -11,6 +11,8 @@ var productImage = require('../server/controller/productImages');
 var admin = require('../server/controller/admin');
 var wishlist = require('../server/controller/wishlist');
 var cart = require('../server/controller/cart');
+var user = require('../server/controller/user');
+var orders = require('../server/controller/orders');
 
 //Helper Function for uploading images
 //Takes in parameter of path, size and mime type
@@ -127,5 +129,14 @@ router.delete('/wishlist/delete', wishlist.deleteProduct);
 router.post('/cart/update', cart.addToCart);
 router.delete('/cart/delete', cart.deleteFromCart);
 router.get('/cart/:id', cart.getCart);
+
+//Ordrs
+router.post('/create-order', orders.createOrder);
+
+//User Address
+router.post('/address/add', user.addNewAddress);
+router.post('/address/update', user.editAddress);
+router.delete('/address/delete', user.deleteAddress);
+router.get('/address/:userid', user.getAddress);
 
 module.exports = router;
