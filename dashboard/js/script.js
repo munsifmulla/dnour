@@ -9,7 +9,7 @@ var urls = {
   search: variables.API_BASE + 'api/find-log',
   create: variables.API_BASE + 'api/create-log',
   registerUser: variables.API_BASE + 'api-user/register',
-  loginUser: variables.API_BASE + 'api-user/login',
+  adminLogin: variables.API_BASE + 'api-admin/login',
   collection: {
     create: variables.API_BASE + 'api/collection/add',
   }
